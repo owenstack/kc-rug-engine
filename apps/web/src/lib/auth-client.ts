@@ -1,8 +1,14 @@
 import type { auth } from "@kc-rugengine/auth";
-import { inferAdditionalFields } from "better-auth/client/plugins";
+import {
+	apiKeyClient,
+	inferAdditionalFields,
+} from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
-export const authClient = createAuthClient({
+const authClient = createAuthClient({
 	baseURL: import.meta.env.VITE_SERVER_URL,
-	plugins: [inferAdditionalFields<typeof auth>()],
+	plugins: [inferAdditionalFields<typeof auth>(), apiKeyClient()],
 });
+
+export const { getSession, useSession, signIn, signOut, signUp, apiKey } =
+	authClient;
