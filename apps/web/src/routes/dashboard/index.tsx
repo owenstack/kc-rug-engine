@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Coins, TrendingUp, Wallet } from "lucide-react";
+import { NewCoinDialog } from "@/components/new";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -20,9 +20,8 @@ import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth-client";
 import { formatCurrency } from "@/lib/helpers";
 import { getSolanaPrice } from "@/lib/queries";
-import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/dashboard")({
+export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
 	beforeLoad: async () => {
 		const session = await getSession();
@@ -31,8 +30,9 @@ export const Route = createFileRoute("/dashboard")({
 				to: "/login",
 				throw: true,
 			});
+			return;
 		}
-		return { session };
+		return;
 	},
 });
 
@@ -44,7 +44,7 @@ function RouteComponent() {
 					<h1 className="mb-1 font-semibold text-3xl">Dashboard</h1>
 					<p className="text-muted-foreground">Manage your funds.</p>
 				</div>
-				<Button>+ Create New Coin</Button>
+				<NewCoinDialog />
 			</div>
 			<div className="grid gap-4 md:grid-cols-3">
 				<Card>
@@ -110,7 +110,7 @@ function RouteComponent() {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<Button>Create Your First Coin</Button>
+							<NewCoinDialog title="Create Your First Coin" />
 						</EmptyContent>
 					</Empty>
 				</Card>
@@ -134,7 +134,7 @@ function RouteComponent() {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<Button>Create Your First Coin</Button>
+							<NewCoinDialog title="Create Your First Coin" />
 						</EmptyContent>
 					</Empty>
 				</Card>

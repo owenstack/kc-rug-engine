@@ -9,7 +9,9 @@
 		}
 	},
 	"type": "module",
-	"scripts": {},
+	"scripts": {
+		"generate": "bunx @better-auth/cli generate --config=./src/index.ts --output=../db/prisma/schema/auth.prisma"
+	},
 	"devDependencies": {
 		"@kc-rugengine/config": "workspace:*"
 	},
