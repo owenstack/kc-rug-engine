@@ -1,7 +1,6 @@
 import { env } from "cloudflare:workers";
 import { createContext } from "@kc-rugengine/api/context";
 import { appRouter } from "@kc-rugengine/api/routers/index";
-import { auth } from "@kc-rugengine/auth";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
 import { OpenAPIReferencePlugin } from "@orpc/openapi/plugins";
 import { onError } from "@orpc/server";
@@ -23,8 +22,6 @@ app.use(
 		credentials: true,
 	}),
 );
-
-app.on(["POST", "GET"], "/api/auth/*", (c) => auth.handler(c.req.raw));
 
 export const apiHandler = new OpenAPIHandler(appRouter, {
 	plugins: [

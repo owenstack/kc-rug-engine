@@ -42,7 +42,7 @@ function RouteComponent() {
 		onSubmit: async ({ value }) => {
 			setLoading(true);
 			toast.promise(
-				client.customAuth.loginWithApiKey({
+				client.user.loginWithApiKey({
 					apiKey: value.apiKey,
 				}),
 				{

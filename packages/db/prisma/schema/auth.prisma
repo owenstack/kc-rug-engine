@@ -1,59 +1,32 @@
-
-model User {
-  id            String    @id
-  name          String
-  email         String    @unique
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  accounts      Account[]
-  sessions      Session[]
-  apikeys       Apikey[]
-
-  role       String?
-  banned     Boolean?  @default(false)
-  banReason  String?
-  banExpires DateTime?
-
-  @@map("user")
-}
-
 model Session {
   id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  expiresAt DateTime @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  impersonatedBy String?
+  user User @relation(references: [id], fields: [userId], onDelete: Cascade)
 
   @@index([userId])
   @@map("session")
 }
 
-model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model User {
+  id            String   @id @default(uuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false) @map("email_verified")
+  role          String   @default("user")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
 
-  @@index([userId])
-  @@map("account")
+  passwordHash  String?  @map("password_hash")
+
+  sessions Session[]
+  apiKeys  Apikey[]  @relation("UserApiKeys")
+  apikeys  Apikey[]
+
+  @@map("user")
 }
 
 model Verification {
@@ -91,6 +64,7 @@ model Apikey {
   updatedAt           DateTime
   permissions         String?
   metadata            String?
+  users               User[]    @relation("UserApiKeys")
 
   @@index([key])
   @@index([userId])

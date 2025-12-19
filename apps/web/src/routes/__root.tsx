@@ -1,5 +1,5 @@
 import type { AppRouterClient } from "@kc-rugengine/api/routers/index";
-import { createORPCClient } from "@orpc/client";
+import { createORPCClient, ORPCError } from "@orpc/client";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -7,9 +7,11 @@ import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
+	useNavigate,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
+import { ErrorBoundary } from "@/components/error-boundary";
 import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -23,6 +25,41 @@ export interface RouterAppContext {
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	component: RootComponent,
+	errorComponent: ({ error }) => {
+		const navigate = useNavigate();
+
+		// Handle 401 Unauthorized errors by redirecting to login
+		if (error instanceof ORPCError) {
+			if (error.message === "Unauthorized" || error.code === "UNAUTHORIZED") {
+				// Use useEffect-like pattern with setTimeout to handle navigation
+				setTimeout(() => {
+					navigate({ to: "/login" });
+				}, 0);
+				return null;
+			}
+		}
+
+		// Determine status code and title
+		let statusCode = 500;
+		let title = "Internal Server Error";
+
+		if (error instanceof ORPCError) {
+			if (error.code === "FORBIDDEN") {
+				statusCode = 403;
+				title = "Forbidden";
+			} else if (error.code === "NOT_FOUND") {
+				statusCode = 404;
+				title = "Not Found";
+			} else if (error.code === "BAD_REQUEST") {
+				statusCode = 400;
+				title = "Bad Request";
+			}
+		}
+
+		return (
+			<ErrorBoundary error={error} statusCode={statusCode} title={title} />
+		);
+	},
 	head: () => ({
 		meta: [
 			{

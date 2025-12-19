@@ -1,12 +1,12 @@
 import type { RouterClient } from "@orpc/server";
 import { miscellaneousRouter } from "./miscellaneous";
-import { adminAuthRouter } from "./routes/admin-auth";
-import { customAuthRouter } from "./routes/custom-auth";
+import { adminRouter } from "./routes/admin";
+import { userRouter } from "./routes/user";
 
 export const appRouter = {
 	misc: miscellaneousRouter,
-	adminAuth: adminAuthRouter,
-	customAuth: customAuthRouter,
+	admin: adminRouter,
+	user: userRouter,
 };
 export type AppRouter = typeof appRouter;
 export type AppRouterClient = RouterClient<typeof appRouter>;

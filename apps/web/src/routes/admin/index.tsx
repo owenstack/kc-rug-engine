@@ -1,27 +1,27 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { CreateUserDialog } from "@/components/admin/new-user";
-import { admin, getSession } from "@/lib/auth-client";
+import { client } from "@/utils/orpc";
 
 export const Route = createFileRoute("/admin/")({
 	component: RouteComponent,
 	beforeLoad: async () => {
-		const session = await getSession();
-		if (!session.data?.user) {
+		const user = await client.user.getCurrentUser();
+		if (!user) {
 			redirect({
 				to: "/admin/login",
 				throw: true,
 			});
 			return { user: null };
 		}
-		if (session.data.user.role !== "admin") {
+		if (user.role !== "admin") {
 			redirect({
 				to: "/dashboard",
 				throw: true,
 			});
 		}
-		const { data } = await admin.listUsers({ query: {} });
+		const { data } = await client.admin.listUsers({ query: {} });
 		const totalUsers = data?.total;
-		return { user: session.data.user, totalUsers };
+		return { user, totalUsers };
 	},
 });
 

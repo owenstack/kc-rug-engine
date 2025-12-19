@@ -17,7 +17,7 @@
     "turborepo"
   ],
   "examples": [],
-  "auth": "better-auth",
+  "auth": "none",
   "packageManager": "bun",
   "dbSetup": "prisma-postgres",
   "api": "orpc",

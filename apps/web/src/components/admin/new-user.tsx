@@ -57,7 +57,7 @@ export function CreateUserDialog() {
 		},
 		onSubmit: async ({ value }) => {
 			toast.promise(
-				client.adminAuth.createRestrictedUser({
+				client.admin.createRestrictedUser({
 					name: value.name,
 					expiresIn: timeUnits.find((tu) => tu.value === value.expiresIn)
 						?.number,

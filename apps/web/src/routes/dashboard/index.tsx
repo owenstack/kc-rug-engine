@@ -17,15 +17,15 @@ import {
 	EmptyTitle,
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
-import { getSession } from "@/lib/auth-client";
 import { formatCurrency } from "@/lib/helpers";
 import { getSolanaPrice } from "@/lib/queries";
+import { client } from "@/utils/orpc";
 
 export const Route = createFileRoute("/dashboard/")({
 	component: RouteComponent,
 	beforeLoad: async () => {
-		const session = await getSession();
-		if (!session.data) {
+		const user = await client.user.getCurrentUser();
+		if (!user) {
 			redirect({
 				to: "/login",
 				throw: true,
