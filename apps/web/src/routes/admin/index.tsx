@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { CreateUserDialog } from "@/components/admin/new-user";
+import ImageGen from "@/components/image-gen";
 import { client } from "@/utils/orpc";
 
 export const Route = createFileRoute("/admin/")({
@@ -40,6 +41,7 @@ function RouteComponent() {
 					<p>There are {totalUsers} active users.</p>
 					<CreateUserDialog />
 				</div>
+				<ImageGen />
 			</div>
 		</main>
 	);

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-export const getSolanaPrice = () => {
+export const useSolanaPrice = () => {
 	const { data: solPrice } = useQuery({
 		queryKey: ["solana-price"],
 		queryFn: async () => {

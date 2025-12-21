@@ -1,5 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { Coins, TrendingUp, Wallet } from "lucide-react";
+import { toast } from "sonner";
 import { NewCoinDialog } from "@/components/new";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +19,7 @@ import {
 } from "@/components/ui/empty";
 import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/helpers";
-import { getSolanaPrice } from "@/lib/queries";
+import { useSolanaPrice } from "@/lib/queries";
 import { client } from "@/utils/orpc";
 
 export const Route = createFileRoute("/dashboard/")({
@@ -44,24 +45,32 @@ function RouteComponent() {
 					<h1 className="mb-1 font-semibold text-3xl">Dashboard</h1>
 					<p className="text-muted-foreground">Manage your funds.</p>
 				</div>
-				<NewCoinDialog />
+				<div onClick={() => toast.info("Coming soon!")}>
+					<NewCoinDialog disabled />
+				</div>
 			</div>
 			<div className="grid gap-4 md:grid-cols-3">
 				<Card>
 					<CardContent className="flex items-center justify-between px-4">
 						<Wallet />
 						<div className="flex gap-1">
-							<Button size={"sm"} variant={"outline"}>
+							<Button
+								size={"sm"}
+								variant={"outline"}
+								onClick={() => toast.info("Coming soon!")}
+							>
 								Withdraw
 							</Button>
-							<Button size={"sm"}>Deposit</Button>
+							<Button size={"sm"} onClick={() => toast.info("Coming soon!")}>
+								Deposit
+							</Button>
 						</div>
 					</CardContent>
 					<CardHeader>
 						<p>Fund wallet</p>
-						<CardTitle>{formatCurrency(1 * getSolanaPrice())}</CardTitle>
+						<CardTitle>{formatCurrency(1 * useSolanaPrice())}</CardTitle>
 						<CardDescription className="text-muted-foreground text-sm">
-							1 SOL (1 SOL = {formatCurrency(getSolanaPrice())})
+							1 SOL (1 SOL = {formatCurrency(useSolanaPrice())})
 						</CardDescription>
 					</CardHeader>
 				</Card>
@@ -85,7 +94,7 @@ function RouteComponent() {
 						<p>Total Earned</p>
 						<CardTitle>$0</CardTitle>
 						<CardDescription className="text-muted-foreground text-sm">
-							0.000 SOL (1 SOL = {formatCurrency(getSolanaPrice())})
+							0.000 SOL (1 SOL = {formatCurrency(useSolanaPrice())})
 						</CardDescription>
 					</CardHeader>
 				</Card>
@@ -97,8 +106,17 @@ function RouteComponent() {
 						<p>Manage and monitor your deployed coins.</p>
 					</div>
 					<div className="flex items-center gap-2">
-						<Input placeholder="Search coins..." />
-						<Button variant={"secondary"}>All</Button>
+						<Input
+							placeholder="Search coins..."
+							readOnly
+							onClick={() => toast.info("Coming soon!")}
+						/>
+						<Button
+							variant={"secondary"}
+							onClick={() => toast.info("Coming soon!")}
+						>
+							All
+						</Button>
 					</div>
 				</div>
 				<Card className="w-full">
@@ -110,7 +128,9 @@ function RouteComponent() {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<NewCoinDialog title="Create Your First Coin" />
+							<div onClick={() => toast.info("Coming soon!")}>
+								<NewCoinDialog title="Create Your First Coin" disabled />
+							</div>
 						</EmptyContent>
 					</Empty>
 				</Card>
@@ -134,7 +154,9 @@ function RouteComponent() {
 							</EmptyDescription>
 						</EmptyHeader>
 						<EmptyContent>
-							<NewCoinDialog title="Create Your First Coin" />
+							<div onClick={() => toast.info("Coming soon!")}>
+								<NewCoinDialog title="Create Your First Coin" disabled />
+							</div>
 						</EmptyContent>
 					</Empty>
 				</Card>

@@ -1,15 +1,35 @@
-import { Link } from "@tanstack/react-router";
-import { ModeToggle } from "./mode-toggle";
-import UserMenu from "./user-menu";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
+import { toast } from "sonner";
+import { orpc } from "@/utils/orpc";
+import { Button } from "./ui/button";
+import { Skeleton } from "./ui/skeleton";
 
 export default function Header() {
 	const links = [
 		{ to: "/", label: "Home" },
 		{ to: "/dashboard", label: "Dashboard" },
 	] as const;
+	const navigate = useNavigate();
+	const { pathname } = useLocation();
+	const {
+		data: user,
+		error,
+		isLoading,
+	} = useQuery(orpc.user.getCurrentUser.queryOptions());
+	const { mutateAsync, isPending } = useMutation(
+		orpc.user.logout.mutationOptions(),
+	);
+
+	if (error && pathname !== "/") {
+		toast.error(error.name, {
+			description: error.message,
+		});
+		navigate({ to: "/login" });
+	}
 
 	return (
-		<div className="fixed top-0 right-0 left-0 z-10 flex w-full items-center justify-between border border-b px-2 py-1 backdrop-blur-md">
+		<div className="fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-between border border-b px-2 py-1 backdrop-blur-md">
 			<div />
 			<nav className="flex gap-4 text-lg">
 				{links.map(({ to, label }) => {
@@ -20,10 +40,21 @@ export default function Header() {
 					);
 				})}
 			</nav>
-			<div className="flex items-center gap-2">
-				<ModeToggle />
-				<UserMenu />
-			</div>
+			{isLoading ? (
+				<Skeleton className="h-9 w-24" />
+			) : user ? (
+				<Button
+					variant={"ghost"}
+					onClick={async () => {
+						await mutateAsync({});
+						navigate({ to: "/login" });
+					}}
+				>
+					{isPending ? "Logging out..." : "Log out"}
+				</Button>
+			) : (
+				<Link to="/login">Sign in</Link>
+			)}
 		</div>
 	);
 }

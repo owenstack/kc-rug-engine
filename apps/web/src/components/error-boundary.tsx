@@ -57,7 +57,7 @@ export function ErrorBoundary({
 	};
 
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 p-4 dark:from-slate-950 dark:to-slate-900">
+		<div className="flex min-h-screen items-center justify-center">
 			<div className="w-full max-w-md space-y-6">
 				{/* Error Icon */}
 				<div className="flex justify-center">
@@ -92,7 +92,7 @@ export function ErrorBoundary({
 							<div className="mt-2 max-h-40 space-y-1 overflow-auto rounded bg-slate-900 p-3 text-slate-100 text-xs dark:bg-slate-800">
 								<p className="font-mono text-red-400">{message}</p>
 								{details && (
-									<pre className="whitespace-pre-wrap break-words text-slate-400">
+									<pre className="wrap-break-word whitespace-pre-wrap text-slate-400">
 										{details}
 									</pre>
 								)}

@@ -30,11 +30,19 @@ const steps = [
 	{ title: "Auto volume" },
 ];
 
-export function NewCoinDialog({ title = "+ Create New Coin" }) {
+export function NewCoinDialog({
+	title = "+ Create New Coin",
+	disabled = false,
+}: {
+	title?: string;
+	disabled?: boolean;
+}) {
 	const { currentStep } = useStepStore();
 	return (
 		<Dialog>
-			<DialogTrigger className={buttonVariants()}>{title}</DialogTrigger>
+			<DialogTrigger className={buttonVariants()} disabled={disabled}>
+				{title}
+			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Create Your Solana Token</DialogTitle>
@@ -87,11 +95,11 @@ function CreateContractForm() {
 		ticker: z.string().min(2, "Ticker must be at least 2 characters long"),
 		decimals: z.number().min(0).max(9),
 		description: z.string().optional(),
-		websiteUrl: z.url().optional(),
-		twitterUrl: z.url().optional(),
-		telegramUrl: z.url().optional(),
+		websiteUrl: z.string().optional(),
+		twitterUrl: z.string().optional(),
+		telegramUrl: z.string().optional(),
 		marketCap: z.number().min(0).max(100_000),
-		image: z.instanceof(File).optional(),
+		image: z.any().optional(),
 		revoke: z.enum(["update", "freeze", "mint", "bundling"]).array().optional(),
 	});
 	const { setCurrentStep } = useStepStore();
@@ -100,16 +108,16 @@ function CreateContractForm() {
 			name: "",
 			ticker: "",
 			decimals: 0,
-			description: "",
-			websiteUrl: "",
-			twitterUrl: "",
-			telegramUrl: "",
+			description: undefined,
+			websiteUrl: undefined,
+			twitterUrl: undefined,
+			telegramUrl: undefined,
 			marketCap: 0,
 			image: undefined,
 			revoke: [],
 		},
 		validators: {
-			onSubmit: formSchema,
+			onSubmit: formSchema as any,
 		},
 		onSubmit: async ({ value }) => {
 			// Handle form submission logic here
@@ -118,4 +126,6 @@ function CreateContractForm() {
 			setCurrentStep(2);
 		},
 	});
+
+	return <div>Form Coming Soon</div>;
 }
