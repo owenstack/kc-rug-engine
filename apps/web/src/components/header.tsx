@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import { toast } from "sonner";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { orpc } from "@/utils/orpc";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
@@ -11,22 +10,13 @@ export default function Header() {
 		{ to: "/dashboard", label: "Dashboard" },
 	] as const;
 	const navigate = useNavigate();
-	const { pathname } = useLocation();
-	const {
-		data: user,
-		error,
-		isLoading,
-	} = useQuery(orpc.user.getCurrentUser.queryOptions());
-	const { mutateAsync, isPending } = useMutation(
-		orpc.user.logout.mutationOptions(),
+	const { data: user, isLoading } = useQuery(
+		orpc.user.getCurrentUser.queryOptions(),
 	);
-
-	if (error && pathname !== "/") {
-		toast.error(error.name, {
-			description: error.message,
-		});
-		navigate({ to: "/login" });
-	}
+	const { mutateAsync, isPending } = useMutation({
+		...orpc.user.logout.mutationOptions(),
+		retry: false,
+	});
 
 	return (
 		<div className="fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-between border border-b px-2 py-1 backdrop-blur-md">
