@@ -25,7 +25,7 @@ export const server = await Worker("server", {
 	compatibility: "node",
 	bindings: {
 		DATABASE_URL: alchemy.secret(process.env.DATABASE_URL),
-		CORS_ORIGIN: process.env.CORS_ORIGIN || "",
+		NODE_ENV: process.env.NODE_ENV || "production",
 		BETTER_AUTH_SECRET: alchemy.secret(process.env.BETTER_AUTH_SECRET),
 		BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "",
 	},

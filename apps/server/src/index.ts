@@ -1,4 +1,3 @@
-import { env } from "cloudflare:workers";
 import { createContext } from "@kc-rugengine/api/context";
 import { appRouter } from "@kc-rugengine/api/routers/index";
 import { OpenAPIHandler } from "@orpc/openapi/fetch";
@@ -9,6 +8,7 @@ import { ZodToJsonSchemaConverter } from "@orpc/zod/zod4";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
+import "dotenv/config";
 
 const app = new Hono();
 
@@ -16,7 +16,19 @@ app.use(logger());
 app.use(
 	"/*",
 	cors({
-		origin: env.CORS_ORIGIN || "",
+		origin: (origin) => {
+			if (
+				process.env.NODE_ENV === "development" ||
+				(origin &&
+					(origin.includes("//localhost:") || origin.includes("//127.0.0.1:")))
+			) {
+				return origin;
+			}
+			if (origin.endsWith(".owenstack.workers.dev")) {
+				return origin;
+			}
+			return "https://owenstack.workers.dev";
+		},
 		allowMethods: ["GET", "POST", "OPTIONS"],
 		allowHeaders: ["Content-Type", "Authorization"],
 		credentials: true,
