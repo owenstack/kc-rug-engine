@@ -17,9 +17,9 @@ import { Label } from "./ui/label";
 const CANVAS_CONFIG = {
 	overlayGradientFactor: 0.5,
 	overlayOpacityStart: 0.7,
-	baseFontSizeFactor: 20,
-	largeFontSizeFactor: 175,
-	hugeFontSizeFactor: 13,
+	baseFontSizeFactor: 25,
+	largeFontSizeFactor: 225,
+	hugeFontSizeFactor: 16,
 	leftMarginFactor: 0.04,
 	rightColumnFactor: 0.3,
 	startYFactor: 0.12,
@@ -33,6 +33,10 @@ interface Metrics {
 	profit: string;
 	multiplier: string;
 	usdValue: number;
+}
+
+interface ImageGenProps {
+	brandName?: string;
 }
 
 const calculateMetrics = (inv: string, sld: string, price: number): Metrics => {
@@ -49,7 +53,7 @@ const calculateMetrics = (inv: string, sld: string, price: number): Metrics => {
 	};
 };
 
-export default function ImageGen() {
+export default function ImageGen({ brandName = "RUGENGINE" }: ImageGenProps) {
 	const price = useSolanaPrice();
 	const [invested, setInvested] = useState("2.10");
 	const [sold, setSold] = useState("3.76");
@@ -58,6 +62,7 @@ export default function ImageGen() {
 		HTMLImageElement | string
 	>(pepe);
 	const [previewUrl, setPreviewUrl] = useState<string | undefined>();
+	const [brandNameInput, setBrandNameInput] = useState(brandName);
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -186,19 +191,16 @@ export default function ImageGen() {
 				profitStartY + largeFontSize * 2.5,
 			);
 
-			// Draw RUG ENGINE text at bottom
+			// Draw brand name text at bottom
 			const bottomY = imgHeight * CANVAS_CONFIG.bottomYFactor;
 			ctx.font = `bold ${baseFontSize * CANVAS_CONFIG.baseFontScaleFactor}px Arial`;
 			ctx.fillStyle = "#00ff41";
-			ctx.fillText("RUG", leftMargin, bottomY);
+			ctx.fillText(brandNameInput, leftMargin, bottomY);
 
-			const rugWidth = ctx.measureText("RUG").width;
-			ctx.fillStyle = "#ff0000";
-			ctx.fillText("ENGINE", leftMargin + rugWidth + 10, bottomY);
+			const brandWidth = ctx.measureText(brandNameInput).width;
 
 			// Draw chart indicator
-			const chartX =
-				leftMargin + rugWidth + ctx.measureText("ENGINE").width + 30;
+			const chartX = leftMargin + brandWidth + 30;
 			const chartY = bottomY - 25;
 			ctx.strokeStyle = "#00ff41";
 			ctx.lineWidth = 3;
@@ -210,7 +212,7 @@ export default function ImageGen() {
 			ctx.lineTo(chartX + 45, chartY - 5);
 			ctx.stroke();
 		},
-		[invested, sold, profit, price],
+		[invested, sold, profit, price, brandNameInput],
 	);
 
 	const downloadImage = useCallback(() => {
@@ -240,6 +242,19 @@ export default function ImageGen() {
 				{/* Controls Panel */}
 				<div className="rounded-lg p-8">
 					<h2 className="mb-6 font-semibold text-xl">Settings</h2>
+
+					{/* Brand Name Input */}
+					<div className="mb-6">
+						<Label className="mb-2 block font-medium text-gray-300 text-sm">
+							Brand Name
+						</Label>
+						<Input
+							type="text"
+							value={brandNameInput}
+							onChange={(e) => setBrandNameInput(e.target.value)}
+							className="w-full rounded-lg bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+						/>
+					</div>
 
 					{/* Image Upload */}
 					<div className="mb-6">
@@ -383,8 +398,9 @@ export default function ImageGen() {
 									</div>
 								</div>
 								<div className="relative z-10 flex items-center gap-2 text-sm md:text-base">
-									<span className="font-bold text-green-400">RUG</span>
-									<span className="font-bold text-red-500">ENGINE</span>
+									<span className="font-bold text-green-400">
+										{brandNameInput}
+									</span>
 
 									{/* Chart SVG matching canvas draw logic */}
 									<TrendingUp className="font-bold text-green-400" />
