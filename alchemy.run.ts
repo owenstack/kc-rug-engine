@@ -12,7 +12,10 @@ export const web = await Vite("web", {
 	cwd: "apps/web",
 	assets: "dist",
 	bindings: {
-		VITE_SERVER_URL: process.env.VITE_SERVER_URL || "",
+		VITE_SERVER_URL:
+			process.env.NODE_ENV === "development"
+				? "http://localhost:3000"
+				: "https://api.rugpullengine.com",
 	},
 	dev: {
 		command: "bun run dev",
@@ -27,7 +30,10 @@ export const server = await Worker("server", {
 		DATABASE_URL: alchemy.secret(process.env.DATABASE_URL),
 		NODE_ENV: process.env.NODE_ENV || "production",
 		BETTER_AUTH_SECRET: alchemy.secret(process.env.BETTER_AUTH_SECRET),
-		BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || "",
+		BETTER_AUTH_URL:
+			process.env.NODE_ENV === "development"
+				? "http://localhost:3000"
+				: "https://api.rugpullengine.com",
 	},
 	dev: {
 		port: 3000,

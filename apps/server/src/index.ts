@@ -24,10 +24,10 @@ app.use(
 			) {
 				return origin;
 			}
-			if (origin.endsWith(".owenstack.workers.dev")) {
+			if (origin.endsWith(".rugpullengine.com")) {
 				return origin;
 			}
-			return "https://owenstack.workers.dev";
+			return "https://rugpullengine.com";
 		},
 		allowMethods: ["GET", "POST", "OPTIONS"],
 		allowHeaders: ["Content-Type", "Authorization"],
