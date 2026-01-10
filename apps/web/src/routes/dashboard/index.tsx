@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Coins, TrendingUp, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { NewCoinDialog } from "@/components/new";
+import { SupportButton } from "@/components/support";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -193,6 +194,7 @@ function RouteComponent() {
 					</Empty>
 				</Card>
 			</div>
+			<SupportButton />
 		</main>
 	);
 }

@@ -1,17 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { BNB, Solana } from "@/assets/logos";
 
 export const Route = createFileRoute("/")({
 	component: HomeComponent,
 	head: () => ({
 		meta: [
 			{
-				title: "RugEngine | Dominate SOL & BNB Blockchain",
+				title: "RugPull Engine | Dominate SOL & BNB Blockchain",
 			},
 			{
 				name: "description",
 				content:
-					"Create and manage SOL & BNB tokens with RugEngine. Features include fast deployment, instant liquidation, multi-wallet management, and social media promotion tools.",
+					"Create and manage SOL & BNB tokens with RugPull Engine. Features include fast deployment, instant liquidation, multi-wallet management, and social media promotion tools.",
 			},
 		],
 	}),
@@ -808,6 +809,12 @@ const styles = `
 
 const features = [
 	{
+		icon: "🔗",
+		title: "Bundler",
+		description:
+			"Securely purchase token supply across multiple sub-wallets at launch without triggering flags on trading platforms.",
+	},
+	{
 		icon: "⚡",
 		title: "Fast Deployment",
 		description:
@@ -820,28 +827,22 @@ const features = [
 			"One-click solution to instantly liquidate all tokens across multiple wallets with maximum efficiency.",
 	},
 	{
+		icon: "✨",
+		title: "User Friendly GUI",
+		description:
+			"Intuitive interface that makes managing your coins effortless — no technical expertise required.",
+	},
+	{
 		icon: "📈",
 		title: "Bump It",
 		description:
 			"Boost your token to the top of Pump.fun and GMGN.AI with organic, tax-free transactions using advanced algorithms.",
 	},
 	{
-		icon: "🔗",
-		title: "Bundler",
-		description:
-			"Securely purchase token supply across multiple sub-wallets at launch without triggering flags on trading platforms.",
-	},
-	{
 		icon: "🤖",
 		title: "Ad Bots",
 		description:
 			"Automated social media engagement to increase your coin's visibility across multiple platforms.",
-	},
-	{
-		icon: "✨",
-		title: "User Friendly GUI",
-		description:
-			"Intuitive interface that makes managing your coins effortless — no technical expertise required.",
 	},
 ];
 
@@ -856,19 +857,19 @@ const pricingFeatures = [
 
 const faqs = [
 	{
-		question: "What is RugEngine?",
+		question: "What is RugPull Engine?",
 		answer:
-			"RugEngine is a comprehensive platform for creating and managing SOL & BNB coins with advanced features like instant liquidation, wallets management, and social media promotion tools. Our platform simplifies the process of deploying and managing tokens while providing essential tools for coin creators.",
+			"RugPull Engine is a comprehensive platform for creating and managing SOL & BNB coins with advanced features like instant liquidation, wallets management, and social media promotion tools. Our platform simplifies the process of deploying and managing tokens while providing essential tools for coin creators.",
 	},
 	{
-		question: "How can I get started with RugEngine?",
+		question: "How can I get started with RugPull Engine?",
 		answer:
 			"To start, choose a pricing plan that fits your needs and contact us on Telegram to purchase. Our team will guide you through the setup process and help you get the most out of the platform's features.",
 	},
 	{
-		question: "What operating systems does RugEngine support?",
+		question: "What operating systems does RugPull Engine support?",
 		answer:
-			"RugEngine is a web-based platform that works on any modern browser, regardless of your operating system. This includes Windows, macOS, Linux, iOS, and Android devices.",
+			"RugPull Engine is a web-based platform that works on any modern browser, regardless of your operating system. This includes Windows, macOS, Linux, iOS, and Android devices.",
 	},
 ];
 
@@ -905,8 +906,10 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
-		<div
+		<button
 			className={`re-faq-item ${isOpen ? "open" : ""}`}
+			type="button"
+			tabIndex={0}
 			onClick={() => setIsOpen(!isOpen)}
 			onKeyDown={(e) => e.key === "Enter" && setIsOpen(!isOpen)}
 		>
@@ -917,7 +920,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
 			<div className="re-faq-answer">
 				<p>{answer}</p>
 			</div>
-		</div>
+		</button>
 	);
 }
 
@@ -957,11 +960,7 @@ function HomeComponent() {
 			<div className="re-content">
 				{/* Hero Section */}
 				<section className="re-hero">
-					<div className="re-hero-badge">
-						<span>Web3 Token Platform</span>
-					</div>
-
-					<h1 className="re-hero-title">RUG ENGINE</h1>
+					<h1 className="re-hero-title">RUGPULL ENGINE</h1>
 					<p className="re-hero-subtitle">Dominate the Blockchain</p>
 
 					<p className="re-hero-description">
@@ -987,16 +986,16 @@ function HomeComponent() {
 
 					<div className="re-chain-badges">
 						<div className="re-chain-badge re-chain-badge-sol">
-							<span>◎</span> Solana
+							<Solana className="size-6" /> Solana
 						</div>
 						<div className="re-chain-badge re-chain-badge-bnb">
-							<span>◆</span> BNB Chain
+							<BNB className="size-6" /> BNB Chain
 						</div>
 					</div>
 
 					<div className="re-disclaimer">
-						RugEngine is a legitimate coin development platform, not associated
-						with scams or "rug pulls."
+						RugPull Engine is a legitimate coin development platform, not
+						associated with scams or "rug pulls."
 					</div>
 
 					<div className="re-scroll-indicator">
@@ -1057,6 +1056,18 @@ function HomeComponent() {
 								Real-time price tracking and analytics
 							</p>
 						</div>
+						<div className="re-integration-card">
+							<div className="re-integration-logo">AXIUM</div>
+							<p className="re-integration-name">
+								Advanced professional trading terminal
+							</p>
+						</div>
+						<div className="re-integration-card">
+							<div className="re-integration-logo">DEXSCREENER</div>
+							<p className="re-integration-name">
+								Leading DEX analytics and charting
+							</p>
+						</div>
 					</div>
 				</section>
 
@@ -1085,15 +1096,13 @@ function HomeComponent() {
 									</li>
 								))}
 							</ul>
-							<a
-								href="https://t.me/RugEngine"
-								target="_blank"
-								rel="noopener noreferrer"
+							<Link
+								to="/pricing"
 								className="re-btn re-btn-secondary"
 								style={{ width: "100%" }}
 							>
-								Contact to Purchase
-							</a>
+								Go to Pricing
+							</Link>
 						</div>
 
 						<div className="re-pricing-card featured">
@@ -1114,15 +1123,13 @@ function HomeComponent() {
 									Lifetime access
 								</li>
 							</ul>
-							<a
-								href="https://t.me/RugEngine"
-								target="_blank"
-								rel="noopener noreferrer"
+							<Link
+								to="/pricing"
 								className="re-btn re-btn-primary"
 								style={{ width: "100%" }}
 							>
-								Contact to Purchase
-							</a>
+								Go to Pricing
+							</Link>
 						</div>
 					</div>
 				</section>
@@ -1148,8 +1155,8 @@ function HomeComponent() {
 						Ready to <span className="re-glow-text">Dominate</span>?
 					</h2>
 					<p className="re-cta-description">
-						Join thousands of developers and degens using RugEngine to create
-						and manage successful tokens.
+						Join thousands of developers and degens using RugPull Engine to
+						create and manage successful tokens.
 					</p>
 					<a
 						href="https://t.me/RugEngine"
@@ -1185,7 +1192,7 @@ function HomeComponent() {
 						</a>
 					</div>
 					<p className="re-footer-copy">
-						© {new Date().getFullYear()} RugEngine. All rights reserved.
+						© {new Date().getFullYear()} RugPull Engine. All rights reserved.
 					</p>
 				</footer>
 			</div>

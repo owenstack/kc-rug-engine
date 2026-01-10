@@ -14,3 +14,18 @@ export const useSolanaPrice = () => {
 	});
 	return solPrice || 0;
 };
+
+export const useBnbPrice = () => {
+	const { data: bnbPrice } = useQuery({
+		queryKey: ["bnb-price"],
+		queryFn: async () => {
+			const res = await fetch(
+				"https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd",
+			);
+			const data = await res.json();
+			return data.binancecoin.usd as number;
+		},
+		refetchInterval: 60000, // refetch every minute
+	});
+	return bnbPrice || 0;
+};

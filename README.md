@@ -1,4 +1,4 @@
-# kc-rugengine
+# RugPull Engine
 
 This project was created with [Better-T-Stack](https://github.com/AmanVarshney01/create-better-t-stack), a modern TypeScript stack that combines React, TanStack Router, Hono, ORPC, and more.
 
@@ -75,7 +75,7 @@ BETTER_AUTH_URL={your-production-server-domain}
 ## Project Structure
 
 ```
-kc-rugengine/
+RugPull Engine/
 ├── apps/
 │   ├── web/         # Frontend application (React + TanStack Router)
 │   └── server/      # Backend API (Hono, ORPC)

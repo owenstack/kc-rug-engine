@@ -17,9 +17,9 @@ import { Label } from "./ui/label";
 const CANVAS_CONFIG = {
 	overlayGradientFactor: 0.5,
 	overlayOpacityStart: 0.7,
-	baseFontSizeFactor: 25,
-	largeFontSizeFactor: 225,
-	hugeFontSizeFactor: 16,
+	baseFontSizeFactor: 35,
+	largeFontSizeFactor: 350,
+	hugeFontSizeFactor: 25,
 	leftMarginFactor: 0.04,
 	rightColumnFactor: 0.3,
 	startYFactor: 0.12,
@@ -53,7 +53,9 @@ const calculateMetrics = (inv: string, sld: string, price: number): Metrics => {
 	};
 };
 
-export default function ImageGen({ brandName = "RUGENGINE" }: ImageGenProps) {
+export default function ImageGen({
+	brandName = "RugPull Engine",
+}: ImageGenProps) {
 	const price = useSolanaPrice();
 	const [invested, setInvested] = useState("2.10");
 	const [sold, setSold] = useState("3.76");

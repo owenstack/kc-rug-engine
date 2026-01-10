@@ -5,9 +5,10 @@ import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
 export default function Header() {
-	const links = [
+	const links: Array<{ to: `/${string}`; label: string }> = [
 		{ to: "/", label: "Home" },
 		{ to: "/dashboard", label: "Dashboard" },
+		{ to: "/pricing", label: "Pricing" },
 	] as const;
 	const navigate = useNavigate();
 	const { data: user, isLoading } = useQuery(
@@ -24,7 +25,7 @@ export default function Header() {
 			<nav className="flex gap-4 text-lg">
 				{links.map(({ to, label }) => {
 					return (
-						<Link key={to} to={to}>
+						<Link key={to} to={to as string}>
 							{label}
 						</Link>
 					);

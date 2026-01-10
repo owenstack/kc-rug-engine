@@ -63,11 +63,11 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 	head: () => ({
 		meta: [
 			{
-				title: "kc-rugengine",
+				title: "RugPull Engine",
 			},
 			{
 				name: "description",
-				content: "kc-rugengine is a web application",
+				content: "RugPull Engine is a web application",
 			},
 		],
 		links: [
