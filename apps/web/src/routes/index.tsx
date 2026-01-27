@@ -971,7 +971,7 @@ function HomeComponent() {
 
 					<div className="re-hero-cta">
 						<a
-							href="https://t.me/RugEngine"
+							href="https://t.me/Rugpullengine01"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-btn re-btn-primary"
@@ -1159,7 +1159,7 @@ function HomeComponent() {
 						create and manage successful tokens.
 					</p>
 					<a
-						href="https://t.me/RugEngine"
+						href="https://t.me/Rugpullengine01"
 						target="_blank"
 						rel="noopener noreferrer"
 						className="re-btn re-btn-primary"
@@ -1183,7 +1183,7 @@ function HomeComponent() {
 							FAQ
 						</a>
 						<a
-							href="https://t.me/RugEngine"
+							href="https://t.me/Rugpullengine01"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-footer-link"

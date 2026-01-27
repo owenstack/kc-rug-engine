@@ -16,6 +16,7 @@ import Header from "@/components/header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { link, type orpc } from "@/utils/orpc";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import "../index.css";
 
 export interface RouterAppContext {
@@ -97,6 +98,7 @@ function RootComponent() {
 					<Outlet />
 				</div>
 				<Toaster richColors />
+				<PWAInstallPrompt />
 			</ThemeProvider>
 			<TanStackRouterDevtools position="bottom-left" />
 			<ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />

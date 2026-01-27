@@ -416,7 +416,7 @@ function PricingComponent() {
 						</ul>
 
 						<a
-							href="https://t.me/RugEngine"
+							href="https://t.me/Rugpullengine01"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-btn re-btn-secondary"
@@ -472,7 +472,7 @@ function PricingComponent() {
 						</ul>
 
 						<a
-							href="https://t.me/RugEngine"
+							href="https://t.me/Rugpullengine01"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-btn re-btn-primary"
