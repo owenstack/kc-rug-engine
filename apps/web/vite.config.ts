@@ -12,26 +12,15 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: "autoUpdate",
-			includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
 			manifest: {
-				name: "RugPull Engine",
-				short_name: "RugEngine",
-				description: "RugPull Engine Web App",
-				theme_color: "#ffffff",
-				icons: [
-					{
-						src: "icon.jpg",
-						sizes: "192x192",
-						type: "image/jpeg",
-					},
-					{
-						src: "icon.jpg",
-						sizes: "512x512",
-						type: "image/jpeg",
-					},
-				],
+				name: "RugPullEngine",
+				short_name: "RugPullEngine",
+				description: "RugPullEngine	 - PWA Application",
+				theme_color: "#0c0c0c",
 			},
-		}) as any,
+			pwaAssets: { disabled: false, config: true },
+			devOptions: { enabled: true },
+		}),
 	],
 	resolve: {
 		alias: {

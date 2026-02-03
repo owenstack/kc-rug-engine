@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { useBnbPrice, useSolanaPrice } from "@/lib/queries";
 
-export const Route = createFileRoute("/pricing")({
+export const Route = createFileRoute("/_others/pricing")({
 	component: PricingComponent,
 	head: () => ({
 		meta: [

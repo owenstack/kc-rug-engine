@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { BNB, Solana } from "@/assets/logos";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_others/")({
 	component: HomeComponent,
 	head: () => ({
 		meta: [
@@ -411,14 +411,23 @@ const styles = `
   }
 
   .re-integration-logo {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin-bottom: 0.75rem;
-    background: linear-gradient(135deg, var(--re-electric-blue), var(--re-electric-purple));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .re-integration-logo svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s;
+  }
+
+  .re-integration-card:hover .re-integration-logo svg {
+    transform: scale(1.1);
   }
 
   .re-integration-name {
@@ -1045,25 +1054,42 @@ function HomeComponent() {
 
 					<div className="re-integrations">
 						<div className="re-integration-card">
-							<div className="re-integration-logo">PUMP.FUN</div>
+							<div className="re-integration-logo">
+								<img
+									src="https://cdn.brandfetch.io/idU_zAl8PX/w/389/h/389/theme/light/logo.png?c=1bxid64Mup7aczewSAYMX&t=1756553939204"
+									alt="Pump.fun"
+								/>
+							</div>
 							<p className="re-integration-name">
 								The largest platform for trading memecoins
 							</p>
 						</div>
 						<div className="re-integration-card">
-							<div className="re-integration-logo">GMGN.AI</div>
+							<div className="re-integration-logo">
+								<img
+									src="https://cdn.brandfetch.io/idhVf6SzVy/w/400/h/400/theme/dark/icon.png?c=1bxid64Mup7aczewSAYMX&t=1759790580343"
+									alt="GMGN"
+								/>
+							</div>
 							<p className="re-integration-name">
 								Real-time price tracking and analytics
 							</p>
 						</div>
 						<div className="re-integration-card">
-							<div className="re-integration-logo">AXIUM</div>
+							<div className="re-integration-logo">
+								<img
+									src="https://cdn.brandfetch.io/ids3R5NX-p/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1768409557124"
+									alt="Axiom"
+								/>
+							</div>
 							<p className="re-integration-name">
 								Advanced professional trading terminal
 							</p>
 						</div>
 						<div className="re-integration-card">
-							<div className="re-integration-logo">DEXSCREENER</div>
+							<div className="re-integration-logo">
+								<img src='https://cdn.brandfetch.io/idCmqPr_mu/w/180/h/180/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1767146096279' alt='Dexscreener' />
+							</div>
 							<p className="re-integration-name">
 								Leading DEX analytics and charting
 							</p>

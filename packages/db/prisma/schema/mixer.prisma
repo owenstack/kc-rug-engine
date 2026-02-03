@@ -1,0 +1,37 @@
+model MixerTransaction {
+    id                   String    @id @default(uuid())
+    userId               String?   @map("user_id")
+    cryptocurrency       String
+    amount               String
+    destinationAddresses String    @map("destination_addresses") // JSON stringified array
+    delayHours           Int       @map("delay_hours")
+    depositAddress       String    @map("deposit_address")
+    status               String    @default("pending") // pending, processing, completed, failed
+    feePercentage        Float     @map("fee_percentage")
+    networkFee           String?   @map("network_fee")
+    createdAt            DateTime  @default(now()) @map("created_at")
+    updatedAt            DateTime  @updatedAt @map("updated_at")
+    completedAt          DateTime? @map("completed_at")
+    metadata             String? // JSON stringified for additional data
+
+    user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+    @@index([userId])
+    @@index([depositAddress])
+    @@index([status])
+    @@map("mixer_transaction")
+}
+
+model MixerWallet {
+    id             String   @id @default(uuid())
+    cryptocurrency String
+    address        String   @unique
+    privateKey     String?  @map("private_key") // Encrypted
+    isActive       Boolean  @default(true) @map("is_active")
+    createdAt      DateTime @default(now()) @map("created_at")
+    updatedAt      DateTime @updatedAt @map("updated_at")
+
+    @@index([cryptocurrency])
+    @@index([isActive])
+    @@map("mixer_wallet")
+}

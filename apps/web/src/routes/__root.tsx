@@ -7,16 +7,17 @@ import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
+	useLocation,
 	useNavigate,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
 import { ErrorBoundary } from "@/components/error-boundary";
 import Header from "@/components/header";
+import { PWAHandler } from "@/components/pwa";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { link, type orpc } from "@/utils/orpc";
-import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import "../index.css";
 
 export interface RouterAppContext {
@@ -81,6 +82,7 @@ export const Route = createRootRouteWithContext<RouterAppContext>()({
 });
 
 function RootComponent() {
+	const location = useLocation();
 	const [client] = useState<AppRouterClient>(() => createORPCClient(link));
 	const [_orpcUtils] = useState(() => createTanstackQueryUtils(client));
 
@@ -94,11 +96,13 @@ function RootComponent() {
 				storageKey="vite-ui-theme"
 			>
 				<div className="grid h-svh grid-rows-[auto_1fr]">
-					<Header />
+					<Header
+						secure={location.pathname !== "/login" && location.pathname !== "/"}
+					/>
 					<Outlet />
 				</div>
 				<Toaster richColors />
-				<PWAInstallPrompt />
+				<PWAHandler />
 			</ThemeProvider>
 			<TanStackRouterDevtools position="bottom-left" />
 			<ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />

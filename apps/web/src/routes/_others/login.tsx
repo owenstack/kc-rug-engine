@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/login/")({
+export const Route = createFileRoute("/_others/login")({
 	component: RouteComponent,
 });
 
@@ -83,8 +83,7 @@ function RouteComponent() {
 								<form.Field name="apiKey">
 									{(field) => {
 										const isInvalid =
-											field.state.meta.isTouched &&
-											field.state.meta.errors.length > 0;
+											field.state.meta.isTouched && !field.state.meta.isValid;
 										return (
 											<Field data-invalid={isInvalid}>
 												<FieldLabel htmlFor={field.name}>API Key</FieldLabel>

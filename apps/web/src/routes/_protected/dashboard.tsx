@@ -24,7 +24,7 @@ import { formatCurrency } from "@/lib/helpers";
 import { useSolanaPrice } from "@/lib/queries";
 import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/dashboard/")({
+export const Route = createFileRoute("/_protected/dashboard")({
 	component: RouteComponent,
 });
 

@@ -1,23 +1,38 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { orpc } from "@/utils/orpc";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
 
-export default function Header() {
-	const links: Array<{ to: `/${string}`; label: string }> = [
-		{ to: "/", label: "Home" },
-		{ to: "/dashboard", label: "Dashboard" },
-		{ to: "/pricing", label: "Pricing" },
-	] as const;
+export default function Header({ secure }: { secure: boolean }) {
+	const location = useLocation();
+	const open =
+		location.pathname === "/" ||
+		location.pathname === "/pricing" ||
+		location.pathname === "/mixer";
 	const navigate = useNavigate();
-	const { data: user, isLoading } = useQuery(
-		orpc.user.getCurrentUser.queryOptions(),
-	);
+	const { data: user, isLoading } = useQuery({
+		...orpc.user.getCurrentUser.queryOptions(),
+		enabled: secure && !open,
+	});
 	const { mutateAsync, isPending } = useMutation({
 		...orpc.user.logout.mutationOptions(),
 		retry: false,
 	});
+	const links: Array<{ to: `/${string}`; label: string }> = [
+		{ to: "/", label: "Home" },
+		{ to: "/dashboard", label: "Dashboard" },
+		{ to: "/mixer", label: "Mixer" },
+		...(user
+			? ([] as Array<{
+					to: `/${string}`;
+					label: string;
+				}>)
+			: ([{ to: "/pricing", label: "Pricing" }] as Array<{
+					to: `/${string}`;
+					label: string;
+				}>)),
+	] as const;
 
 	return (
 		<div className="fixed top-0 right-0 left-0 z-50 flex w-full items-center justify-between border border-b px-2 py-1 backdrop-blur-md">
@@ -31,7 +46,7 @@ export default function Header() {
 					);
 				})}
 			</nav>
-			{isLoading ? (
+			{secure && isLoading ? (
 				<Skeleton className="h-9 w-24" />
 			) : user ? (
 				<Button

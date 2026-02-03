@@ -2,6 +2,7 @@ import { Download, TrendingUp, Upload } from "lucide-react";
 import {
 	type ChangeEvent,
 	useCallback,
+	useEffect,
 	useMemo,
 	useRef,
 	useState,
@@ -18,7 +19,7 @@ const CANVAS_CONFIG = {
 	overlayGradientFactor: 0.5,
 	overlayOpacityStart: 0.7,
 	baseFontSizeFactor: 35,
-	largeFontSizeFactor: 350,
+	largeFontSizeFactor: 35,
 	hugeFontSizeFactor: 25,
 	leftMarginFactor: 0.04,
 	rightColumnFactor: 0.3,
@@ -60,13 +61,22 @@ export default function ImageGen({
 	const [invested, setInvested] = useState("2.10");
 	const [sold, setSold] = useState("3.76");
 	const [profit, setProfit] = useState("1.66");
-	const [backgroundImage, setBackgroundImage] = useState<
-		HTMLImageElement | string
-	>(pepe);
-	const [previewUrl, setPreviewUrl] = useState<string | undefined>();
+	const [backgroundImage, setBackgroundImage] =
+		useState<HTMLImageElement | null>(null);
+	const [previewUrl, setPreviewUrl] = useState<string>(pepe);
 	const [brandNameInput, setBrandNameInput] = useState(brandName);
+	const [telegramLink, setTelegramLink] = useState("@RugPullEngine");
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
+
+	// Load default image on mount
+	useEffect(() => {
+		const img = new Image();
+		img.onload = () => {
+			setBackgroundImage(img);
+		};
+		img.src = pepe;
+	}, []);
 
 	const handleInvestedChange = useCallback(
 		(value: string) => {
@@ -213,24 +223,35 @@ export default function ImageGen({
 			ctx.moveTo(chartX + 35, chartY + 5);
 			ctx.lineTo(chartX + 45, chartY - 5);
 			ctx.stroke();
+
+			// Draw telegram link below brand name
+			if (telegramLink) {
+				const telegramY = bottomY - baseFontSize * 1.2;
+				ctx.font = `${baseFontSize * 0.7}px Arial`;
+				ctx.fillStyle = "#ffffff";
+				ctx.fillText(telegramLink, leftMargin, telegramY);
+			}
 		},
-		[invested, sold, profit, price, brandNameInput],
+		[invested, sold, profit, price, brandNameInput, telegramLink],
 	);
 
 	const downloadImage = useCallback(() => {
 		if (!backgroundImage || !canvasRef.current) {
+			console.error("Image not loaded or canvas not ready");
 			return;
 		}
 
-		if (backgroundImage instanceof HTMLImageElement) {
-			drawCanvas(canvasRef.current, backgroundImage);
-		}
+		// Draw the canvas with current state
+		drawCanvas(canvasRef.current, backgroundImage);
 
-		// Download
-		const link = document.createElement("a");
-		link.download = "crypto-profit.png";
-		link.href = canvasRef.current.toDataURL("image/png");
-		link.click();
+		// Small delay to ensure canvas is fully rendered
+		setTimeout(() => {
+			if (!canvasRef.current) return;
+			const link = document.createElement("a");
+			link.download = "crypto-profit.png";
+			link.href = canvasRef.current.toDataURL("image/png");
+			link.click();
+		}, 100);
 	}, [backgroundImage, drawCanvas]);
 
 	const metrics = useMemo(
@@ -240,7 +261,7 @@ export default function ImageGen({
 
 	return (
 		<div className="mx-auto mt-10 max-w-5xl">
-			<div className="grid gap-8 md:grid-cols-2">
+			<div className="grid gap-8">
 				{/* Controls Panel */}
 				<div className="rounded-lg p-8">
 					<h2 className="mb-6 font-semibold text-xl">Settings</h2>
@@ -254,6 +275,20 @@ export default function ImageGen({
 							type="text"
 							value={brandNameInput}
 							onChange={(e) => setBrandNameInput(e.target.value)}
+							className="w-full rounded-lg bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
+						/>
+					</div>
+
+					{/* Telegram Link Input */}
+					<div className="mb-6">
+						<Label className="mb-2 block font-medium text-gray-300 text-sm">
+							Telegram Channel
+						</Label>
+						<Input
+							type="text"
+							value={telegramLink}
+							onChange={(e) => setTelegramLink(e.target.value)}
+							placeholder="@YourChannel or t.me/YourChannel"
 							className="w-full rounded-lg bg-gray-700 px-4 py-2 text-white focus:outline-none focus:ring-2 focus:ring-green-500"
 						/>
 					</div>
@@ -360,7 +395,7 @@ export default function ImageGen({
 					<h2 className="mb-4 font-bold text-white text-xl">Preview</h2>
 					<div className="relative overflow-hidden rounded-lg bg-black">
 						<img
-							src={previewUrl || pepe}
+							src={previewUrl}
 							alt="Preview"
 							className="h-auto w-full object-cover"
 						/>
@@ -399,13 +434,20 @@ export default function ImageGen({
 										${metrics.usdValue}
 									</div>
 								</div>
-								<div className="relative z-10 flex items-center gap-2 text-sm md:text-base">
-									<span className="font-bold text-green-400">
-										{brandNameInput}
-									</span>
+								<div className="relative z-10">
+									{telegramLink && (
+										<div className="mb-1 text-white text-xs md:text-sm">
+											{telegramLink}
+										</div>
+									)}
+									<div className="flex items-center gap-2 text-sm md:text-base">
+										<span className="font-bold text-green-400">
+											{brandNameInput}
+										</span>
 
-									{/* Chart SVG matching canvas draw logic */}
-									<TrendingUp className="font-bold text-green-400" />
+										{/* Chart SVG matching canvas draw logic */}
+										<TrendingUp className="font-bold text-green-400" />
+									</div>
 								</div>
 							</div>
 						</div>
