@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { BNB, Solana } from "@/assets/logos";
 import axiom from "@/assets/images/axiom.jpeg";
 import gmgn from "@/assets/images/gmgn.jpeg";
+import { BNB, Solana } from "@/assets/logos";
 
 export const Route = createFileRoute("/_others/")({
 	component: HomeComponent,
@@ -1079,7 +1079,7 @@ function HomeComponent() {
 								<img src={axiom} alt="Axiom" />
 							</div>
 							<p className="re-integration-name">
-								Axium.trade - Advanced DEX aggregator and trading platform
+								Axiom.trade - Advanced DEX aggregator and trading platform
 							</p>
 						</div>
 						<div className="re-integration-card">

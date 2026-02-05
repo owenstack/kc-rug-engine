@@ -8,7 +8,7 @@ const MIXER_WALLETS = {
 	BTC: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
 	ETH: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
 	SOL: "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU",
-	LTC: "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz",
+	BNB: "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz",
 	USDT: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
 } as const;
 
@@ -16,7 +16,7 @@ const FEE_RANGES = {
 	BTC: { min: 0.5, max: 3 },
 	ETH: { min: 0.5, max: 2.5 },
 	SOL: { min: 0.3, max: 2 },
-	LTC: { min: 0.5, max: 2 },
+	BNB: { min: 0.5, max: 2 },
 	USDT: { min: 1, max: 3 },
 } as const;
 
@@ -24,7 +24,7 @@ export const mixerRouter = {
 	createMixerTransaction: publicProcedure
 		.input(
 			z.object({
-				cryptocurrency: z.enum(["BTC", "ETH", "SOL", "LTC", "USDT"]),
+				cryptocurrency: z.enum(["BTC", "ETH", "SOL", "BNB", "USDT"]),
 				amount: z.string().min(1),
 				destinationAddresses: z.array(z.string()).min(1).max(5),
 				delayHours: z.number().min(0).max(72),
@@ -141,7 +141,7 @@ export const mixerRouter = {
 	getWalletAddress: publicProcedure
 		.input(
 			z.object({
-				cryptocurrency: z.enum(["BTC", "ETH", "SOL", "LTC", "USDT"]),
+				cryptocurrency: z.enum(["BTC", "ETH", "SOL", "BNB", "USDT"]),
 			}),
 		)
 		.handler(async ({ input }) => {

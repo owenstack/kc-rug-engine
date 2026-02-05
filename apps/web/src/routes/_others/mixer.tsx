@@ -12,26 +12,26 @@ import {
 	CardHeader,
 	CardTitle,
 } from "@/components/ui/card";
+import {
+	Field,
+	FieldDescription,
+	FieldError,
+	FieldGroup,
+	FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useCryptoPrices } from "@/lib/queries";
 import { cn } from "@/lib/utils";
 import { orpc } from "@/utils/orpc";
-import {
-	Field,
-	FieldGroup,
-	FieldDescription,
-	FieldError,
-	FieldLabel,
-} from "@/components/ui/field";
 
 export const Route = createFileRoute("/_others/mixer")({
 	component: RouteComponent,
 });
 
 type MixingStep = "input" | "processing" | "complete";
-type CryptoType = "BTC" | "ETH" | "SOL" | "LTC" | "USDT";
+type CryptoType = "BTC" | "ETH" | "SOL" | "BNB" | "USDT";
 
 interface MixingProgress {
 	status: string;
@@ -52,7 +52,7 @@ function RouteComponent() {
 		BTC: "0.5-3%",
 		ETH: "0.5-2.5%",
 		SOL: "0.3-2%",
-		LTC: "0.5-2%",
+		BNB: "0.5-2%",
 		USDT: "1-3%",
 	};
 
@@ -317,7 +317,7 @@ function RouteComponent() {
 														Minimum:{" "}
 														{crypto === "BTC"
 															? "0.001"
-															: crypto === "ETH"
+															: crypto === "ETH" || crypto === "BNB"
 																? "0.01"
 																: "0.1"}{" "}
 														{crypto}
@@ -476,8 +476,8 @@ function RouteComponent() {
 													? "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 													: crypto === "SOL"
 														? "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
-														: crypto === "LTC"
-															? "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz"
+														: crypto === "BNB"
+															? "bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2"
 															: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 										}
 										readOnly
@@ -493,8 +493,8 @@ function RouteComponent() {
 														? "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
 														: crypto === "SOL"
 															? "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
-															: crypto === "LTC"
-																? "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz"
+															: crypto === "BNB"
+																? "bnb1grpf0955h0ykzq3ar5nmum7y6gdfl6lxfn46h2"
 																: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
 											)
 										}

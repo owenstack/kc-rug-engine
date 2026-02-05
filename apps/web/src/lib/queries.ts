@@ -39,7 +39,7 @@ interface CryptoPricesResponse {
 	bitcoin?: CryptoPriceData;
 	ethereum?: CryptoPriceData;
 	solana?: CryptoPriceData;
-	litecoin?: CryptoPriceData;
+	binancecoin?: CryptoPriceData;
 	tether?: CryptoPriceData;
 }
 
@@ -48,7 +48,7 @@ const FALLBACK_PRICES = {
 	BTC: { price: 98450.32, change24h: 2.34 },
 	ETH: { price: 3567.89, change24h: 1.87 },
 	SOL: { price: 142.75, change24h: 3.45 },
-	LTC: { price: 95.67, change24h: 3.21 },
+	BNB: { price: 612.45, change24h: 1.92 },
 	USDT: { price: 1.0, change24h: 0.01 },
 };
 
@@ -58,7 +58,7 @@ export const useCryptoPrices = () => {
 		queryFn: async () => {
 			try {
 				const res = await fetch(
-					"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,litecoin,tether&vs_currencies=usd&include_24hr_change=true",
+					"https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,binancecoin,tether&vs_currencies=usd&include_24hr_change=true",
 				);
 
 				// If rate limited or other error, return fallback
@@ -86,10 +86,10 @@ export const useCryptoPrices = () => {
 						change24h:
 							data.solana?.usd_24h_change || FALLBACK_PRICES.SOL.change24h,
 					},
-					LTC: {
-						price: data.litecoin?.usd || FALLBACK_PRICES.LTC.price,
+					BNB: {
+						price: data.binancecoin?.usd || FALLBACK_PRICES.BNB.price,
 						change24h:
-							data.litecoin?.usd_24h_change || FALLBACK_PRICES.LTC.change24h,
+							data.binancecoin?.usd_24h_change || FALLBACK_PRICES.BNB.change24h,
 					},
 					USDT: {
 						price: data.tether?.usd || FALLBACK_PRICES.USDT.price,
