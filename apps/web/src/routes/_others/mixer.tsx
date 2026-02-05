@@ -248,7 +248,7 @@ function RouteComponent() {
 										<FieldLabel>Select cryptocurrency</FieldLabel>
 										<div className="grid grid-cols-5 gap-2">
 											{(
-												["BTC", "ETH", "XMR", "LTC", "USDT"] as CryptoType[]
+												["BTC", "ETH", "SOL", "BNB", "USDT"] as CryptoType[]
 											).map((c) => (
 												<Button
 													key={c}

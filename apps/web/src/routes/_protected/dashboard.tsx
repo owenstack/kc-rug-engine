@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { Coins, TrendingUp, Wallet } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { NewCoinDialog } from "@/components/new";
 import { SupportButton } from "@/components/support";
@@ -19,10 +20,14 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@/components/ui/empty";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { formatCurrency } from "@/lib/helpers";
 import { useSolanaPrice } from "@/lib/queries";
 import { orpc } from "@/utils/orpc";
+
+type PlatformType = "pump.fun" | "raydium" | "jupiter" | "moonshot";
+type CoinType = "standard" | "meme" | "utility" | "governance" | "nft";
 
 export const Route = createFileRoute("/_protected/dashboard")({
 	component: RouteComponent,
@@ -30,6 +35,9 @@ export const Route = createFileRoute("/_protected/dashboard")({
 
 function RouteComponent() {
 	const navigate = useNavigate();
+	const [platform, setPlatform] = useState<PlatformType>("pump.fun");
+	const [coinType, setCoinType] = useState<CoinType>("standard");
+
 	const { data: user } = useQuery({
 		...orpc.user.getCurrentUser.queryOptions(),
 		retry: false,
@@ -50,6 +58,67 @@ function RouteComponent() {
 
 	return (
 		<main className="container mx-auto mt-10 max-w-4xl space-y-8 px-4 sm:px-6 lg:px-8">
+			{/* Platform and Coin Type Selectors */}
+			<Card>
+				<CardHeader>
+					<CardTitle>Launch Configuration</CardTitle>
+					<CardDescription>
+						Select your preferred platform and coin type before creating
+					</CardDescription>
+				</CardHeader>
+				<CardContent className="space-y-6">
+					<Field>
+						<FieldLabel>Launch Platform</FieldLabel>
+						<div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+							{(
+								["pump.fun", "raydium", "jupiter", "moonshot"] as PlatformType[]
+							).map((p) => (
+								<Button
+									key={p}
+									type="button"
+									variant={platform === p ? "default" : "outline"}
+									onClick={() => handleProtectedAction(() => setPlatform(p))}
+									className="w-full capitalize"
+								>
+									{p}
+								</Button>
+							))}
+						</div>
+						<p className="mt-2 text-muted-foreground text-xs">
+							Selected: <span className="font-medium">{platform}</span>
+						</p>
+					</Field>
+
+					<Field>
+						<FieldLabel>Coin Type</FieldLabel>
+						<div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+							{(
+								[
+									"standard",
+									"meme",
+									"utility",
+									"governance",
+									"nft",
+								] as CoinType[]
+							).map((type) => (
+								<Button
+									key={type}
+									type="button"
+									variant={coinType === type ? "default" : "outline"}
+									onClick={() => handleProtectedAction(() => setCoinType(type))}
+									className="w-full capitalize"
+								>
+									{type}
+								</Button>
+							))}
+						</div>
+						<p className="mt-2 text-muted-foreground text-xs">
+							Selected: <span className="font-medium">{coinType}</span>
+						</p>
+					</Field>
+				</CardContent>
+			</Card>
+
 			<div className="mt-4 flex items-center justify-between">
 				<div>
 					<h1 className="mb-1 font-semibold text-3xl">Dashboard</h1>
@@ -177,20 +246,20 @@ function RouteComponent() {
 								You don't have any active coins.
 							</EmptyDescription>
 						</EmptyHeader>
-						<button
-							type="button"
-							onClick={() =>
-								handleProtectedAction(() => toast.info("Coming soon!"))
-							}
-							className="w-full"
-						>
-							<EmptyContent>
+						<EmptyContent>
+							<button
+								type="button"
+								onClick={() =>
+									handleProtectedAction(() => toast.info("Coming soon!"))
+								}
+								className="w-full"
+							>
 								<NewCoinDialog
 									title="Create Your First Coin"
 									disabled={!user}
 								/>
-							</EmptyContent>
-						</button>
+							</button>
+						</EmptyContent>
 					</Empty>
 				</Card>
 			</div>

@@ -1,9 +1,9 @@
 import { useForm } from "@tanstack/react-form";
 import { Check, LoaderCircle } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import * as z from "zod";
 import { useStepStore } from "@/lib/store";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -11,6 +11,7 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "./ui/dialog";
+import { Field, FieldLabel } from "./ui/field";
 import { ScrollArea } from "./ui/scroll-area";
 import {
 	Stepper,
@@ -23,6 +24,9 @@ import {
 	StepperTitle,
 	StepperTrigger,
 } from "./ui/stepper";
+
+type PlatformType = "pump.fun" | "raydium" | "jupiter" | "moonshot";
+type CoinType = "standard" | "meme" | "utility" | "governance" | "nft";
 
 const steps = [
 	{ title: "Contract creation" },
@@ -90,6 +94,9 @@ export function NewCoinDialog({
 }
 
 function CreateContractForm() {
+	const [platform, setPlatform] = useState<PlatformType>("pump.fun");
+	const [coinType, setCoinType] = useState<CoinType>("standard");
+
 	const formSchema = z.object({
 		name: z.string().min(2, "Name must be at least 2 characters long"),
 		ticker: z.string().min(2, "Ticker must be at least 2 characters long"),
@@ -101,6 +108,8 @@ function CreateContractForm() {
 		marketCap: z.number().min(0).max(100_000),
 		image: z.any().optional(),
 		revoke: z.enum(["update", "freeze", "mint", "bundling"]).array().optional(),
+		platform: z.enum(["pump.fun", "raydium", "jupiter", "moonshot"]),
+		coinType: z.enum(["standard", "meme", "utility", "governance", "nft"]),
 	});
 	const { setCurrentStep } = useStepStore();
 	const _form = useForm({
@@ -108,16 +117,19 @@ function CreateContractForm() {
 			name: "",
 			ticker: "",
 			decimals: 0,
-			description: undefined,
-			websiteUrl: undefined,
-			twitterUrl: undefined,
-			telegramUrl: undefined,
+			description: "",
+			websiteUrl: "",
+			twitterUrl: "",
+			telegramUrl: "",
 			marketCap: 0,
 			image: undefined,
 			revoke: [],
+			platform: platform,
+			coinType: coinType,
 		},
 		validators: {
-			onSubmit: formSchema as any,
+			// @ts-expect-error - TanStack Form Zod integration type mismatch
+			onSubmit: formSchema,
 		},
 		onSubmit: async ({ value }) => {
 			// Handle form submission logic here
@@ -127,5 +139,53 @@ function CreateContractForm() {
 		},
 	});
 
-	return <div>Form Coming Soon</div>;
+	return (
+		<div className="space-y-6 p-4">
+			<Field>
+				<FieldLabel>Select Launch Platform</FieldLabel>
+				<div className="grid grid-cols-2 gap-2">
+					{(
+						["pump.fun", "raydium", "jupiter", "moonshot"] as PlatformType[]
+					).map((p) => (
+						<Button
+							key={p}
+							type="button"
+							variant={platform === p ? "default" : "outline"}
+							onClick={() => setPlatform(p)}
+							className="w-full capitalize"
+						>
+							{p}
+						</Button>
+					))}
+				</div>
+				<p className="mt-2 text-muted-foreground text-xs">
+					Selected platform: <span className="font-medium">{platform}</span>
+				</p>
+			</Field>
+			<Field>
+				<FieldLabel>Select Coin Type</FieldLabel>
+				<div className="grid grid-cols-3 gap-2">
+					{(
+						["standard", "meme", "utility", "governance", "nft"] as CoinType[]
+					).map((type) => (
+						<Button
+							key={type}
+							type="button"
+							variant={coinType === type ? "default" : "outline"}
+							onClick={() => setCoinType(type)}
+							className="w-full capitalize"
+						>
+							{type}
+						</Button>
+					))}
+				</div>
+				<p className="mt-2 text-muted-foreground text-xs">
+					Selected type: <span className="font-medium">{coinType}</span>
+				</p>
+			</Field>
+			<p className="text-center text-muted-foreground text-sm">
+				Form fields coming soon...
+			</p>
+		</div>
+	);
 }
