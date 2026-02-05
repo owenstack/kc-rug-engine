@@ -31,7 +31,7 @@ export const Route = createFileRoute("/_others/mixer")({
 });
 
 type MixingStep = "input" | "processing" | "complete";
-type CryptoType = "BTC" | "ETH" | "XMR" | "LTC" | "USDT";
+type CryptoType = "BTC" | "ETH" | "SOL" | "LTC" | "USDT";
 
 interface MixingProgress {
 	status: string;
@@ -51,7 +51,7 @@ function RouteComponent() {
 	const fees = {
 		BTC: "0.5-3%",
 		ETH: "0.5-2.5%",
-		XMR: "0.3-2%",
+		SOL: "0.3-2%",
 		LTC: "0.5-2%",
 		USDT: "1-3%",
 	};
@@ -176,6 +176,52 @@ function RouteComponent() {
 								<div className="text-muted-foreground text-xs">
 									Support for 5+ cryptocurrencies
 								</div>
+							</div>
+						</div>
+					</CardContent>
+				</Card>
+				{/* How It Works Section */}
+				<Card>
+					<CardHeader>
+						<CardTitle>How CryptoMix Works</CardTitle>
+					</CardHeader>
+					<CardContent className="space-y-4">
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+							<div className="space-y-2">
+								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+									1
+								</div>
+								<h3 className="font-semibold text-sm">Deposit</h3>
+								<p className="text-muted-foreground text-xs">
+									Send your crypto to our secure mixing address
+								</p>
+							</div>
+							<div className="space-y-2">
+								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+									2
+								</div>
+								<h3 className="font-semibold text-sm">Mix</h3>
+								<p className="text-muted-foreground text-xs">
+									Funds are split and mixed with other transactions
+								</p>
+							</div>
+							<div className="space-y-2">
+								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+									3
+								</div>
+								<h3 className="font-semibold text-sm">Delay</h3>
+								<p className="text-muted-foreground text-xs">
+									Random time delays make tracking impossible
+								</p>
+							</div>
+							<div className="space-y-2">
+								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
+									4
+								</div>
+								<h3 className="font-semibold text-sm">Receive</h3>
+								<p className="text-muted-foreground text-xs">
+									Clean crypto sent to your destination addresses
+								</p>
 							</div>
 						</div>
 					</CardContent>
@@ -428,8 +474,8 @@ function RouteComponent() {
 												? "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
 												: crypto === "ETH"
 													? "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-													: crypto === "XMR"
-														? "4AdUndXHHZ6cfufTMvppY6JwXNouMBzSkbLYfpAV5Usx"
+													: crypto === "SOL"
+														? "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
 														: crypto === "LTC"
 															? "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz"
 															: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
@@ -445,8 +491,8 @@ function RouteComponent() {
 													? "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
 													: crypto === "ETH"
 														? "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-														: crypto === "XMR"
-															? "4AdUndXHHZ6cfufTMvppY6JwXNouMBzSkbLYfpAV5Usx"
+														: crypto === "SOL"
+															? "7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU"
 															: crypto === "LTC"
 																? "ltc1qhsj5ha6vdxjzp7zz5zqz5qzqzqzqzqzqz"
 																: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
@@ -576,53 +622,6 @@ function RouteComponent() {
 						</CardContent>
 					</Card>
 				)}
-
-				{/* How It Works Section */}
-				<Card>
-					<CardHeader>
-						<CardTitle>How CryptoMix Works</CardTitle>
-					</CardHeader>
-					<CardContent className="space-y-4">
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-							<div className="space-y-2">
-								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
-									1
-								</div>
-								<h3 className="font-semibold text-sm">Deposit</h3>
-								<p className="text-muted-foreground text-xs">
-									Send your crypto to our secure mixing address
-								</p>
-							</div>
-							<div className="space-y-2">
-								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
-									2
-								</div>
-								<h3 className="font-semibold text-sm">Mix</h3>
-								<p className="text-muted-foreground text-xs">
-									Funds are split and mixed with other transactions
-								</p>
-							</div>
-							<div className="space-y-2">
-								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
-									3
-								</div>
-								<h3 className="font-semibold text-sm">Delay</h3>
-								<p className="text-muted-foreground text-xs">
-									Random time delays make tracking impossible
-								</p>
-							</div>
-							<div className="space-y-2">
-								<div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 font-bold text-primary">
-									4
-								</div>
-								<h3 className="font-semibold text-sm">Receive</h3>
-								<p className="text-muted-foreground text-xs">
-									Clean crypto sent to your destination addresses
-								</p>
-							</div>
-						</div>
-					</CardContent>
-				</Card>
 
 				{/* FAQ Section */}
 				<Card>

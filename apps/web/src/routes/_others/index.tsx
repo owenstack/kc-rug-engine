@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { BNB, Solana } from "@/assets/logos";
+import axiom from "@/assets/images/axiom.jpeg";
+import gmgn from "@/assets/images/gmgn.jpeg";
 
 export const Route = createFileRoute("/_others/")({
 	component: HomeComponent,
@@ -1061,37 +1063,34 @@ function HomeComponent() {
 								/>
 							</div>
 							<p className="re-integration-name">
-								The largest platform for trading memecoins
+								Pump.fun - Premier DEX token launchpad and tracker
+							</p>
+						</div>
+						<div className="re-integration-card">
+							<div className="re-integration-logo">
+								<img src={gmgn} alt="GMGN" />
+							</div>
+							<p className="re-integration-name">
+								GMGN.AI - AI-powered memecoin exchange aggregator
+							</p>
+						</div>
+						<div className="re-integration-card">
+							<div className="re-integration-logo">
+								<img src={axiom} alt="Axiom" />
+							</div>
+							<p className="re-integration-name">
+								Axium.trade - Advanced DEX aggregator and trading platform
 							</p>
 						</div>
 						<div className="re-integration-card">
 							<div className="re-integration-logo">
 								<img
-									src="https://cdn.brandfetch.io/idhVf6SzVy/w/400/h/400/theme/dark/icon.png?c=1bxid64Mup7aczewSAYMX&t=1759790580343"
-									alt="GMGN"
+									src="https://cdn.brandfetch.io/idCmqPr_mu/w/180/h/180/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1767146096279"
+									alt="Dexscreener"
 								/>
 							</div>
 							<p className="re-integration-name">
-								Real-time price tracking and analytics
-							</p>
-						</div>
-						<div className="re-integration-card">
-							<div className="re-integration-logo">
-								<img
-									src="https://cdn.brandfetch.io/ids3R5NX-p/w/400/h/400/theme/dark/icon.jpeg?c=1bxid64Mup7aczewSAYMX&t=1768409557124"
-									alt="Axiom"
-								/>
-							</div>
-							<p className="re-integration-name">
-								Advanced professional trading terminal
-							</p>
-						</div>
-						<div className="re-integration-card">
-							<div className="re-integration-logo">
-								<img src='https://cdn.brandfetch.io/idCmqPr_mu/w/180/h/180/theme/dark/logo.png?c=1bxid64Mup7aczewSAYMX&t=1767146096279' alt='Dexscreener' />
-							</div>
-							<p className="re-integration-name">
-								Leading DEX analytics and charting
+								Dexscreener.com - Real-time DEX token analytics and charts
 							</p>
 						</div>
 					</div>
@@ -1197,7 +1196,7 @@ function HomeComponent() {
 
 				{/* Footer */}
 				<footer className="re-footer">
-					<div className="re-footer-logo">RUG ENGINE</div>
+					<div className="re-footer-logo">RUGPULL ENGINE</div>
 					<div className="re-footer-links">
 						<a href="#features" className="re-footer-link">
 							Features
