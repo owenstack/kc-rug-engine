@@ -7,7 +7,7 @@ import {
 } from "@kc-rugengine/auth";
 import prisma from "@kc-rugengine/db";
 import { ORPCError } from "@orpc/client";
-import { z } from "zod";
+import * as z from "zod";
 import { adminProcedure, publicProcedure } from "../../index";
 
 export const adminRouter = {

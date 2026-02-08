@@ -1,5 +1,5 @@
 import alchemy from "alchemy";
-import { Vite, Worker } from "alchemy/cloudflare";
+import { R2Bucket, Vite, Worker } from "alchemy/cloudflare";
 import { config } from "dotenv";
 
 config({ path: "./.env" });
@@ -7,6 +7,11 @@ config({ path: "./apps/web/.env" });
 config({ path: "./apps/server/.env" });
 
 const app = await alchemy("kc-rugengine");
+
+const bucket = await R2Bucket("assets", {
+	devDomain: true,
+	name: "rugpullengine-assets",
+});
 
 export const web = await Vite("web", {
 	cwd: "apps/web",
@@ -34,6 +39,8 @@ export const server = await Worker("server", {
 			process.env.NODE_ENV === "development"
 				? "http://localhost:3000"
 				: "https://api.rugpullengine.com",
+		BUCKET: bucket,
+		BUCKET_URL: bucket.devDomain ?? "",
 	},
 	dev: {
 		port: 3000,

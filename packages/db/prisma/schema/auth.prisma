@@ -26,6 +26,8 @@ model User {
   apiKeys           Apikey[]           @relation("UserApiKeys")
   apikeys           Apikey[]
   mixerTransactions MixerTransaction[]
+  documents         Document[]
+  coins             Coin[]
 
   @@map("user")
 }

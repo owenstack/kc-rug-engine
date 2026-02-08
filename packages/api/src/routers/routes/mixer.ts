@@ -1,6 +1,6 @@
 import prisma from "@kc-rugengine/db";
 import { ORPCError } from "@orpc/server";
-import { z } from "zod";
+import * as z from "zod";
 import { protectedProcedure, publicProcedure } from "../../index";
 
 // Dedicated wallet addresses for each cryptocurrency

@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { Coins, TrendingUp, Wallet } from "lucide-react";
-import { useState } from "react";
+import { Coins, Link, Send, TrendingUp, Twitter, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { NewCoinDialog } from "@/components/new";
 import { SupportButton } from "@/components/support";
@@ -20,24 +19,35 @@ import {
 	EmptyHeader,
 	EmptyTitle,
 } from "@/components/ui/empty";
-import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import {
+	Item,
+	ItemActions,
+	ItemContent,
+	ItemDescription,
+	ItemHeader,
+	ItemMedia,
+	ItemTitle,
+} from "@/components/ui/item";
 import { formatCurrency } from "@/lib/helpers";
 import { useSolanaPrice } from "@/lib/queries";
-import { orpc } from "@/utils/orpc";
-
-type PlatformType = "pump.fun" | "raydium" | "jupiter" | "moonshot";
-type CoinType = "standard" | "meme" | "utility" | "governance" | "nft";
+import { client, orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_protected/dashboard")({
 	component: RouteComponent,
+	beforeLoad: async () => {
+		const { coins } = await client.coin.getUserCoins();
+		return { coins };
+	},
 });
 
 function RouteComponent() {
+	const { coins } = Route.useRouteContext();
 	const navigate = useNavigate();
-	const [platform, setPlatform] = useState<PlatformType>("pump.fun");
-	const [coinType, setCoinType] = useState<CoinType>("standard");
-
+	const { data } = useQuery({
+		...orpc.coin.getUserCoins.queryOptions(),
+		initialData: { coins },
+	});
 	const { data: user } = useQuery({
 		...orpc.user.getCurrentUser.queryOptions(),
 		retry: false,
@@ -58,80 +68,12 @@ function RouteComponent() {
 
 	return (
 		<main className="container mx-auto mt-10 max-w-4xl space-y-8 px-4 sm:px-6 lg:px-8">
-			{/* Platform and Coin Type Selectors */}
-			<Card>
-				<CardHeader>
-					<CardTitle>Launch Configuration</CardTitle>
-					<CardDescription>
-						Select your preferred platform and coin type before creating
-					</CardDescription>
-				</CardHeader>
-				<CardContent className="space-y-6">
-					<Field>
-						<FieldLabel>Launch Platform</FieldLabel>
-						<div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-							{(
-								["pump.fun", "raydium", "jupiter", "moonshot"] as PlatformType[]
-							).map((p) => (
-								<Button
-									key={p}
-									type="button"
-									variant={platform === p ? "default" : "outline"}
-									onClick={() => handleProtectedAction(() => setPlatform(p))}
-									className="w-full capitalize"
-								>
-									{p}
-								</Button>
-							))}
-						</div>
-						<p className="mt-2 text-muted-foreground text-xs">
-							Selected: <span className="font-medium">{platform}</span>
-						</p>
-					</Field>
-
-					<Field>
-						<FieldLabel>Coin Type</FieldLabel>
-						<div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
-							{(
-								[
-									"standard",
-									"meme",
-									"utility",
-									"governance",
-									"nft",
-								] as CoinType[]
-							).map((type) => (
-								<Button
-									key={type}
-									type="button"
-									variant={coinType === type ? "default" : "outline"}
-									onClick={() => handleProtectedAction(() => setCoinType(type))}
-									className="w-full capitalize"
-								>
-									{type}
-								</Button>
-							))}
-						</div>
-						<p className="mt-2 text-muted-foreground text-xs">
-							Selected: <span className="font-medium">{coinType}</span>
-						</p>
-					</Field>
-				</CardContent>
-			</Card>
-
 			<div className="mt-4 flex items-center justify-between">
 				<div>
 					<h1 className="mb-1 font-semibold text-3xl">Dashboard</h1>
 					<p className="text-muted-foreground">Manage your funds.</p>
 				</div>
-				<button
-					type="button"
-					onClick={() =>
-						handleProtectedAction(() => toast.info("Coming soon!"))
-					}
-				>
-					<NewCoinDialog disabled={!user} />
-				</button>
+				<NewCoinDialog disabled={!user} />
 			</div>
 			<div className="grid gap-4 md:grid-cols-3">
 				<Card>
@@ -171,7 +113,7 @@ function RouteComponent() {
 					</CardContent>
 					<CardHeader>
 						<p>Coins</p>
-						<CardTitle>0</CardTitle>
+						<CardTitle>{data.coins.length}</CardTitle>
 						<CardDescription className="text-muted-foreground text-sm">
 							Displayed
 						</CardDescription>
@@ -215,17 +157,93 @@ function RouteComponent() {
 					</div>
 				</div>
 				<Card className="w-full">
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No coins found</EmptyTitle>
-							<EmptyDescription>
-								You haven't created any coins yet.
-							</EmptyDescription>
-						</EmptyHeader>
-						<EmptyContent>
-							<NewCoinDialog title="Create Your First Coin" disabled={!user} />
-						</EmptyContent>
-					</Empty>
+					{data.coins.length > 0 ? (
+						<div>
+							{data.coins.map((coin) => (
+								<Item key={coin.id} variant={"outline"}>
+									<ItemMedia variant={"image"}>
+										<img
+											src={coin.image}
+											alt={coin.name}
+											width={32}
+											height={32}
+											className="object-cover"
+										/>
+									</ItemMedia>
+									<ItemContent>
+										<ItemHeader>
+											<ItemTitle>
+												{coin.name}{" "}
+												<span className="rounded-md border border-secondary bg-secondary px-4 py-2 text-secondary-foreground">
+													{coin.ticker}
+												</span>
+											</ItemTitle>
+											<ItemDescription>
+												<a href={coin.websiteUrl}>
+													<Link className="size-4" />
+												</a>
+												<a href={coin.twitterUrl}>
+													<Twitter className="size-4" />
+												</a>
+												<a href={coin.telegramUrl}>
+													<Send className="size-4" />
+												</a>
+											</ItemDescription>
+										</ItemHeader>
+									</ItemContent>
+									<ItemContent>
+										<ItemDescription>
+											<span className="grid gap-2">
+												<p>Holders</p>
+												{20}
+											</span>
+											<span className="grid gap-2">
+												<p>Market cap.</p>
+												{formatCurrency(coin.marketCap)}
+											</span>
+											<span className="grid gap-2">
+												<p>Total PnL</p>
+												{0}
+											</span>
+										</ItemDescription>
+										<ItemActions>
+											{["Sell dev", "25%", "50%", "75%", "Dump all"].map(
+												(b) => (
+													<Button
+														onClick={() =>
+															handleProtectedAction(() =>
+																toast.info("Coming soon!"),
+															)
+														}
+														key={b}
+														variant={b === "Dump All" ? "default" : "outline"}
+														size={"sm"}
+													>
+														{b}
+													</Button>
+												),
+											)}
+										</ItemActions>
+									</ItemContent>
+								</Item>
+							))}
+						</div>
+					) : (
+						<Empty>
+							<EmptyHeader>
+								<EmptyTitle>No coins found</EmptyTitle>
+								<EmptyDescription>
+									You haven't created any coins yet.
+								</EmptyDescription>
+							</EmptyHeader>
+							<EmptyContent>
+								<NewCoinDialog
+									title="Create Your First Coin"
+									disabled={!user}
+								/>
+							</EmptyContent>
+						</Empty>
+					)}
 				</Card>
 			</div>
 			<div className="flex flex-col space-y-4">
@@ -239,28 +257,83 @@ function RouteComponent() {
 					</div>
 				</div>
 				<Card className="w-full">
-					<Empty>
-						<EmptyHeader>
-							<EmptyTitle>No coins found</EmptyTitle>
-							<EmptyDescription>
-								You don't have any active coins.
-							</EmptyDescription>
-						</EmptyHeader>
-						<EmptyContent>
-							<button
-								type="button"
-								onClick={() =>
-									handleProtectedAction(() => toast.info("Coming soon!"))
-								}
-								className="w-full"
-							>
-								<NewCoinDialog
-									title="Create Your First Coin"
-									disabled={!user}
-								/>
-							</button>
-						</EmptyContent>
-					</Empty>
+					{data.coins.length > 0 ? (
+						<div>
+							{data.coins.map((coin) => (
+								<Item key={coin.id} variant={"outline"}>
+									<ItemMedia variant={"image"}>
+										<img
+											src={coin.image}
+											alt={coin.name}
+											width={32}
+											height={32}
+											className="object-cover"
+										/>
+									</ItemMedia>
+									<ItemContent>
+										<ItemHeader>
+											<ItemTitle>
+												{coin.name}{" "}
+												<span className="rounded-md border border-secondary bg-secondary px-4 py-2 text-secondary-foreground">
+													{coin.ticker}
+												</span>
+											</ItemTitle>
+											<ItemDescription>
+												<a href={coin.websiteUrl}>
+													<Link className="size-4" />
+												</a>
+												<a href={coin.twitterUrl}>
+													<Twitter className="size-4" />
+												</a>
+												<a href={coin.telegramUrl}>
+													<Send className="size-4" />
+												</a>
+											</ItemDescription>
+										</ItemHeader>
+									</ItemContent>
+									<ItemContent>
+										<ItemDescription>
+											<span className="grid gap-2">
+												<p>Holders</p>
+												{20}
+											</span>
+											<span className="grid gap-2">
+												<p>Market cap.</p>
+												{formatCurrency(coin.marketCap)}
+											</span>
+											<span className="grid gap-2">
+												<p>Total PnL</p>
+												{0}
+											</span>
+										</ItemDescription>
+									</ItemContent>
+								</Item>
+							))}
+						</div>
+					) : (
+						<Empty>
+							<EmptyHeader>
+								<EmptyTitle>No coins found</EmptyTitle>
+								<EmptyDescription>
+									You don't have any active coins.
+								</EmptyDescription>
+							</EmptyHeader>
+							<EmptyContent>
+								<button
+									type="button"
+									onClick={() =>
+										handleProtectedAction(() => toast.info("Coming soon!"))
+									}
+									className="w-full"
+								>
+									<NewCoinDialog
+										title="Create Your First Coin"
+										disabled={!user}
+									/>
+								</button>
+							</EmptyContent>
+						</Empty>
+					)}
 				</Card>
 			</div>
 			<SupportButton />

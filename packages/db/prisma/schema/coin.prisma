@@ -1,0 +1,47 @@
+model Coin {
+    id          String   @id @default(uuid())
+    name        String
+    ticker      String
+    description String
+    decimals    Int
+    websiteUrl  String
+    twitterUrl  String
+    telegramUrl String
+    marketCap   Int
+    revoke      String[]
+    userId      String   @map("user_id")
+    user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    createdAt     DateTime       @default(now()) @map("created_at")
+    updatedAt     DateTime       @updatedAt @map("updated_at")
+    bundledWallet BundledWallet?
+    volume        Volume?
+
+    @@map("coin")
+}
+
+model BundledWallet {
+    id                  String @id @default(uuid())
+    devBuyAmount        Int
+    bundledByAmount     Int
+    bundledWalletAmount Int
+    slippage            Int
+    bundledLaunchType   String
+    coinId              String @unique
+    coin                Coin   @relation(fields: [coinId], references: [id], onDelete: Cascade)
+
+    @@map("bundled_wallet")
+}
+
+model Volume {
+    id           String @id @default(uuid())
+    coinId       String @unique
+    volume       Int
+    minBuyAmount Int
+    maxBuyAmount Int
+    slippage     Int
+    delay        Int
+    coin         Coin   @relation(fields: [coinId], references: [id])
+
+    @@map("volume")
+}
