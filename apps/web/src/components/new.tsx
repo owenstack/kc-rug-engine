@@ -1,5 +1,5 @@
 import { Check, LoaderCircle } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { useStepStore } from "@/lib/store";
 import { CreateContractForm } from "./create-coin/first";
 import { CreateWalletsForm } from "./create-coin/second";
@@ -24,6 +24,10 @@ import {
 	StepperTitle,
 	StepperTrigger,
 } from "./ui/stepper";
+import { useQuery } from "@tanstack/react-query";
+import { orpc } from "@/utils/orpc";
+import { toast } from "sonner";
+import { useNavigate } from "@tanstack/react-router";
 
 const steps = [
 	{ title: "Contract creation" },
@@ -33,15 +37,40 @@ const steps = [
 
 export function NewCoinDialog({
 	title = "+ Create New Coin",
-	disabled = false,
 }: {
 	title?: string;
-	disabled?: boolean;
 }) {
-	const { currentStep } = useStepStore();
+	const [open, setOpen] = useState(false);
+	const navigate = useNavigate();
+	const { currentStep, setCurrentStep } = useStepStore();
+	const { data: user } = useQuery({
+		...orpc.user.getCurrentUser.queryOptions(),
+		retry: false,
+	});
+
+	const handleProtectedAction = (action: () => void) => {
+		if (!user) {
+			toast.error("Sign in required", {
+				action: {
+					label: "Sign In",
+					onClick: () => navigate({ to: "/login" }),
+				},
+			});
+			return;
+		}
+		action();
+	};
 	return (
-		<Dialog open={currentStep > 3}>
-			<DialogTrigger className={buttonVariants()} disabled={disabled}>
+		<Dialog open={open} onOpenChange={setOpen}>
+			<DialogTrigger
+				onClick={() =>
+					handleProtectedAction(() => {
+						setOpen(!open);
+						setCurrentStep(1);
+					})
+				}
+				className={buttonVariants()}
+			>
 				{title}
 			</DialogTrigger>
 			<DialogContent>
@@ -71,19 +100,15 @@ export function NewCoinDialog({
 							))}
 						</StepperNav>
 						<StepperPanel className="text-sm">
-							{steps.map((step, index) => (
-								<StepperContent
-									key={step.title}
-									value={index + 1}
-									className="flex items-center justify-center"
-								>
-									<ScrollArea>
+							<ScrollArea className="h-110">
+								{steps.map((step, index) => (
+									<StepperContent key={step.title} value={index + 1}>
 										{currentStep === 1 && <CreateContractForm />}
 										{currentStep === 2 && <CreateWalletsForm />}
 										{currentStep === 3 && <CreateAutoVolumeForm />}
-									</ScrollArea>
-								</StepperContent>
-							))}
+									</StepperContent>
+								))}
+							</ScrollArea>
 						</StepperPanel>
 					</Stepper>
 				</DialogHeader>

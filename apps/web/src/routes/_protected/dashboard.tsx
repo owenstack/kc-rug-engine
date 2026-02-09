@@ -73,7 +73,7 @@ function RouteComponent() {
 					<h1 className="mb-1 font-semibold text-3xl">Dashboard</h1>
 					<p className="text-muted-foreground">Manage your funds.</p>
 				</div>
-				<NewCoinDialog disabled={!user} />
+				<NewCoinDialog />
 			</div>
 			<div className="grid gap-4 md:grid-cols-3">
 				<Card>
@@ -237,10 +237,7 @@ function RouteComponent() {
 								</EmptyDescription>
 							</EmptyHeader>
 							<EmptyContent>
-								<NewCoinDialog
-									title="Create Your First Coin"
-									disabled={!user}
-								/>
+								<NewCoinDialog title="Create Your First Coin" />
 							</EmptyContent>
 						</Empty>
 					)}
@@ -319,18 +316,7 @@ function RouteComponent() {
 								</EmptyDescription>
 							</EmptyHeader>
 							<EmptyContent>
-								<button
-									type="button"
-									onClick={() =>
-										handleProtectedAction(() => toast.info("Coming soon!"))
-									}
-									className="w-full"
-								>
-									<NewCoinDialog
-										title="Create Your First Coin"
-										disabled={!user}
-									/>
-								</button>
+								<NewCoinDialog title="Create Your First Coin" />
 							</EmptyContent>
 						</Empty>
 					)}

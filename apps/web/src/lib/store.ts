@@ -8,7 +8,7 @@ interface StepState {
 }
 
 export const useStepStore = create<StepState>((set) => ({
-	currentStep: 1,
+	currentStep: 0,
 	setCurrentStep: (step: number) => set({ currentStep: step }),
 	coinId: "",
 	setCoinId: (coinId: string) => set({ coinId }),

@@ -19,6 +19,7 @@ import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dash
 import { Route as OthersPricingRouteImport } from './routes/_others/pricing'
 import { Route as OthersMixerRouteImport } from './routes/_others/mixer'
 import { Route as OthersLoginRouteImport } from './routes/_others/login'
+import { Route as OthersHiddenSignupRouteImport } from './routes/_others/hidden/signup'
 
 const ProtectedRoute = ProtectedRouteImport.update({
   id: '/_protected',
@@ -68,6 +69,11 @@ const OthersLoginRoute = OthersLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => OthersRoute,
 } as any)
+const OthersHiddenSignupRoute = OthersHiddenSignupRouteImport.update({
+  id: '/hidden/signup',
+  path: '/hidden/signup',
+  getParentRoute: () => OthersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/login': typeof OthersLoginRoute
@@ -78,6 +84,7 @@ export interface FileRoutesByFullPath {
   '/admin/signup': typeof AdminSignupRoute
   '/': typeof OthersIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRoutesByTo {
   '/login': typeof OthersLoginRoute
@@ -88,6 +95,7 @@ export interface FileRoutesByTo {
   '/admin/signup': typeof AdminSignupRoute
   '/': typeof OthersIndexRoute
   '/admin': typeof AdminIndexRoute
+  '/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -101,6 +109,7 @@ export interface FileRoutesById {
   '/admin/signup': typeof AdminSignupRoute
   '/_others/': typeof OthersIndexRoute
   '/admin/': typeof AdminIndexRoute
+  '/_others/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
     | '/admin/signup'
     | '/'
     | '/admin'
+    | '/hidden/signup'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/login'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/admin/signup'
     | '/'
     | '/admin'
+    | '/hidden/signup'
   id:
     | '__root__'
     | '/_others'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/admin/signup'
     | '/_others/'
     | '/admin/'
+    | '/_others/hidden/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -217,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OthersLoginRouteImport
       parentRoute: typeof OthersRoute
     }
+    '/_others/hidden/signup': {
+      id: '/_others/hidden/signup'
+      path: '/hidden/signup'
+      fullPath: '/hidden/signup'
+      preLoaderRoute: typeof OthersHiddenSignupRouteImport
+      parentRoute: typeof OthersRoute
+    }
   }
 }
 
@@ -225,6 +244,7 @@ interface OthersRouteChildren {
   OthersMixerRoute: typeof OthersMixerRoute
   OthersPricingRoute: typeof OthersPricingRoute
   OthersIndexRoute: typeof OthersIndexRoute
+  OthersHiddenSignupRoute: typeof OthersHiddenSignupRoute
 }
 
 const OthersRouteChildren: OthersRouteChildren = {
@@ -232,6 +252,7 @@ const OthersRouteChildren: OthersRouteChildren = {
   OthersMixerRoute: OthersMixerRoute,
   OthersPricingRoute: OthersPricingRoute,
   OthersIndexRoute: OthersIndexRoute,
+  OthersHiddenSignupRoute: OthersHiddenSignupRoute,
 }
 
 const OthersRouteWithChildren =
