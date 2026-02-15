@@ -1,5 +1,7 @@
+import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { Check, LoaderCircle } from "lucide-react";
 import { Fragment, useState } from "react";
+import { toast } from "sonner";
 import { useStepStore } from "@/lib/store";
 import { CreateContractForm } from "./create-coin/first";
 import { CreateWalletsForm } from "./create-coin/second";
@@ -24,10 +26,6 @@ import {
 	StepperTitle,
 	StepperTrigger,
 } from "./ui/stepper";
-import { useQuery } from "@tanstack/react-query";
-import { orpc } from "@/utils/orpc";
-import { toast } from "sonner";
-import { useNavigate } from "@tanstack/react-router";
 
 const steps = [
 	{ title: "Contract creation" },
@@ -40,13 +38,10 @@ export function NewCoinDialog({
 }: {
 	title?: string;
 }) {
+	const { user } = useRouteContext({ from: "/_protected" });
 	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
 	const { currentStep, setCurrentStep } = useStepStore();
-	const { data: user } = useQuery({
-		...orpc.user.getCurrentUser.queryOptions(),
-		retry: false,
-	});
 
 	const handleProtectedAction = (action: () => void) => {
 		if (!user) {
