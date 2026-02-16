@@ -35,14 +35,17 @@ import { client, orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/_protected/dashboard")({
 	component: RouteComponent,
-	beforeLoad: async () => {
-		const { coins } = await client.coin.getUserCoins();
-		return { coins };
+	beforeLoad: async ({ context }) => {
+		if (context.user) {
+			const { coins } = await client.coin.getUserCoins();
+			return { coins };
+		}
+		return { coins: [] };
 	},
 });
 
 function RouteComponent() {
-	const { coins } = Route.useRouteContext();
+	const { coins, user: contextUser } = Route.useRouteContext();
 	const navigate = useNavigate();
 	const { data } = useQuery({
 		...orpc.coin.getUserCoins.queryOptions(),
@@ -51,6 +54,8 @@ function RouteComponent() {
 	const { data: user } = useQuery({
 		...orpc.user.getCurrentUser.queryOptions(),
 		retry: false,
+		enabled: !!contextUser,
+		initialData: contextUser,
 	});
 
 	const handleProtectedAction = (action: () => void) => {

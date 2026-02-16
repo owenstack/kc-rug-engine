@@ -5,7 +5,7 @@ import { buttonVariants } from "./ui/button";
 export function SupportButton() {
 	return (
 		<a
-			href="https://t.me/rugpullengineadmin"
+			href="https://t.me/rugpullenginedev"
 			target="_blank"
 			rel="noreferrer"
 			className={cn(

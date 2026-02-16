@@ -4,8 +4,12 @@ import { client } from "@/utils/orpc";
 export const Route = createFileRoute("/_protected")({
 	component: RouteComponent,
 	beforeLoad: async () => {
-		const user = await client.user.getCurrentUser();
-		return { user };
+		try {
+			const user = await client.user.getCurrentUser();
+			return { user };
+		} catch (_e) {
+			return { user: null };
+		}
 	},
 });
 

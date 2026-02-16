@@ -1,12 +1,12 @@
 import { useNavigate, useRouteContext } from "@tanstack/react-router";
 import { Check, LoaderCircle } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, type MouseEvent, useState } from "react";
 import { toast } from "sonner";
 import { useStepStore } from "@/lib/store";
 import { CreateContractForm } from "./create-coin/first";
 import { CreateWalletsForm } from "./create-coin/second";
 import { CreateAutoVolumeForm } from "./create-coin/third";
-import { buttonVariants } from "./ui/button";
+import { Button } from "./ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -42,9 +42,9 @@ export function NewCoinDialog({
 	const [open, setOpen] = useState(false);
 	const navigate = useNavigate();
 	const { currentStep, setCurrentStep } = useStepStore();
-
-	const handleProtectedAction = (action: () => void) => {
+	const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
 		if (!user) {
+			e.preventDefault();
 			toast.error("Sign in required", {
 				action: {
 					label: "Sign In",
@@ -53,20 +53,14 @@ export function NewCoinDialog({
 			});
 			return;
 		}
-		action();
+		setOpen(true);
+		setCurrentStep(1);
 	};
+
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogTrigger
-				onClick={() =>
-					handleProtectedAction(() => {
-						setOpen(!open);
-						setCurrentStep(1);
-					})
-				}
-				className={buttonVariants()}
-			>
-				{title}
+			<DialogTrigger asChild>
+				<Button onClick={handleClick}>{title}</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
