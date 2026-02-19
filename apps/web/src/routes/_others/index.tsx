@@ -206,21 +206,25 @@ const styles = `
   }
 
   .re-btn-primary {
-    background: linear-gradient(135deg, var(--re-neon-green), #00cc6a);
-    color: var(--re-dark-void);
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    color: #000000;
+    font-weight: 800;
+    text-shadow: none;
     box-shadow: 
       0 0 0 1px var(--re-neon-green),
-      0 4px 20px var(--re-neon-green-dim),
-      inset 0 1px 0 rgba(255,255,255,0.2);
+      0 4px 20px rgba(0, 255, 136, 0.5),
+      0 8px 32px rgba(0, 0, 0, 0.4),
+      inset 0 1px 0 rgba(255,255,255,0.3);
   }
 
   .re-btn-primary:hover {
+    background: linear-gradient(135deg, #33ffaa, #00ff88);
     transform: translateY(-2px);
     box-shadow: 
       0 0 0 1px var(--re-neon-green),
-      0 8px 40px var(--re-neon-green-dim),
-      0 0 60px var(--re-neon-green-dim),
-      inset 0 1px 0 rgba(255,255,255,0.2);
+      0 8px 40px rgba(0, 255, 136, 0.6),
+      0 0 60px rgba(0, 255, 136, 0.3),
+      inset 0 1px 0 rgba(255,255,255,0.3);
   }
 
   .re-btn-secondary {
@@ -1148,13 +1152,15 @@ function HomeComponent() {
 									Lifetime access
 								</li>
 							</ul>
-							<Link
-								to="/pricing"
+							<a
+								href="https://t.me/rugpullenginedev"
+								target="_blank"
+								rel="noopener noreferrer"
 								className="re-btn re-btn-primary"
 								style={{ width: "100%" }}
 							>
-								Go to Pricing
-							</Link>
+								Get Started
+							</a>
 						</div>
 					</div>
 				</section>
@@ -1189,7 +1195,7 @@ function HomeComponent() {
 						rel="noopener noreferrer"
 						className="re-btn re-btn-primary"
 					>
-						<span>Get Started Now</span>
+						<span>Join the Community</span>
 						<span>→</span>
 					</a>
 				</section>

@@ -252,15 +252,17 @@ const styles = `
   }
 
   .re-btn-primary {
-    background: var(--re-neon-green);
-    color: var(--re-dark-void);
-    box-shadow: 0 0 20px var(--re-neon-green-dim);
+    background: linear-gradient(135deg, #00ff88, #00cc6a);
+    color: #000000;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.4), 0 4px 16px rgba(0,0,0,0.3);
     border: none;
+    text-shadow: none;
   }
 
   .re-btn-primary:hover {
-    background: #00cc6a;
-    box-shadow: 0 0 40px var(--re-neon-green-dim);
+    background: linear-gradient(135deg, #33ffaa, #00ff88);
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.5), 0 8px 24px rgba(0,0,0,0.4);
     transform: translateY(-2px);
   }
 
@@ -416,7 +418,7 @@ function PricingComponent() {
 						</ul>
 
 						<a
-							href="https://t.me/rugpullengine0"
+							href="https://t.me/rugpullenginedev"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-btn re-btn-secondary"
@@ -472,7 +474,7 @@ function PricingComponent() {
 						</ul>
 
 						<a
-							href="https://t.me/rugpullengine0"
+							href="https://t.me/rugpullenginedev"
 							target="_blank"
 							rel="noopener noreferrer"
 							className="re-btn re-btn-primary"
