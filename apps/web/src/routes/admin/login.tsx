@@ -26,7 +26,7 @@ function RouteComponent() {
 	const formSchema = z.object({
 		email: z
 			.email({ error: "Invalid email address" })
-			.refine((val) => val.endsWith("@efobi.dev"), {
+			.refine((val) => val.endsWith("@rugpullengine.com"), {
 				error: "Email domain not allowed",
 			}),
 		password: z
@@ -99,7 +99,7 @@ function RouteComponent() {
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
 												type="email"
-												placeholder="admin@efobi.dev"
+												placeholder="admin@rugpullengine.com"
 												className="mt-1"
 											/>
 											{isInvalid && (
