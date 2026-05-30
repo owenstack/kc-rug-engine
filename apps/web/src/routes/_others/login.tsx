@@ -1,8 +1,8 @@
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
 import { toast } from "sonner";
-import { z } from "zod";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
 	Card,
@@ -19,14 +19,16 @@ import {
 	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { client } from "@/utils/orpc";
+import { orpc } from "@/utils/orpc";
 
-export const Route = createFileRoute("/login/")({
+export const Route = createFileRoute("/_others/login")({
 	component: RouteComponent,
 });
 
 function RouteComponent() {
-	const [loading, setLoading] = useState(false);
+	const { mutateAsync, isPending } = useMutation(
+		orpc.user.loginWithApiKey.mutationOptions(),
+	);
 	const navigate = useNavigate();
 	const schema = z.object({
 		apiKey: z.string().min(1, "API Key is required"),
@@ -40,9 +42,8 @@ function RouteComponent() {
 			onSubmit: schema,
 		},
 		onSubmit: async ({ value }) => {
-			setLoading(true);
 			toast.promise(
-				client.customAuth.loginWithApiKey({
+				mutateAsync({
 					apiKey: value.apiKey,
 				}),
 				{
@@ -56,7 +57,6 @@ function RouteComponent() {
 					error: (err) => `Failed to sign in: ${(err as Error).message}`,
 				},
 			);
-			setLoading(false);
 		},
 	});
 
@@ -83,8 +83,7 @@ function RouteComponent() {
 								<form.Field name="apiKey">
 									{(field) => {
 										const isInvalid =
-											field.state.meta.isTouched &&
-											field.state.meta.errors.length > 0;
+											field.state.meta.isTouched && !field.state.meta.isValid;
 										return (
 											<Field data-invalid={isInvalid}>
 												<FieldLabel htmlFor={field.name}>API Key</FieldLabel>
@@ -106,8 +105,8 @@ function RouteComponent() {
 								</form.Field>
 							</FieldGroup>
 						</FieldSet>
-						<Button type="submit" disabled={loading} className="w-full">
-							{loading ? "Logging in..." : "Login"}
+						<Button type="submit" disabled={isPending} className="w-full">
+							{isPending ? "Logging in..." : "Login"}
 						</Button>
 					</form>
 				</CardContent>

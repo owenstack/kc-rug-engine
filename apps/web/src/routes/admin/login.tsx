@@ -1,7 +1,8 @@
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import { z } from "zod";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
 	Field,
@@ -11,7 +12,7 @@ import {
 	FieldSet,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { signIn } from "@/lib/auth-client";
+import { orpc } from "@/utils/orpc";
 
 export const Route = createFileRoute("/admin/login")({
 	component: RouteComponent,
@@ -25,13 +26,17 @@ function RouteComponent() {
 	const formSchema = z.object({
 		email: z
 			.email({ error: "Invalid email address" })
-			.refine((val) => val.endsWith("@efobi.dev"), {
+			.refine((val) => val.endsWith("@rugpullengine.com"), {
 				error: "Email domain not allowed",
 			}),
 		password: z
 			.string()
 			.min(8, { error: "Password must be at least 8 characters" }),
 	});
+
+	const { mutateAsync, isPending } = useMutation(
+		orpc.admin.login.mutationOptions(),
+	);
 
 	const form = useForm({
 		defaultValues: {
@@ -42,25 +47,18 @@ function RouteComponent() {
 			onSubmit: formSchema,
 		},
 		onSubmit: async ({ value }) => {
-			toast.promise(
-				signIn.email({ email: value.email, password: value.password }),
-				{
-					loading: "Signing in...",
-					success: (res) => {
-						if (res.error) {
-							toast.error(res.error.code, {
-								description: res.error.message,
-							});
-							return "Failed to sign in";
-						}
-						navigate({
-							to: "/admin",
-						});
-						return "Signed in successfully";
-					},
-					error: "Failed to sign in",
+			toast.promise(mutateAsync(value), {
+				loading: "Signing in...",
+				success: () => {
+					navigate({
+						to: "/admin",
+					});
+					return "Signed in successfully";
 				},
-			);
+				error: (err) => {
+					return err.message || "Failed to sign in";
+				},
+			});
 		},
 	});
 
@@ -101,7 +99,7 @@ function RouteComponent() {
 												onChange={(e) => field.handleChange(e.target.value)}
 												aria-invalid={isInvalid}
 												type="email"
-												placeholder="admin@efobi.dev"
+												placeholder="admin@rugpullengine.com"
 												className="mt-1"
 											/>
 											{isInvalid && (
@@ -146,7 +144,7 @@ function RouteComponent() {
 									<Button
 										type="submit"
 										className="w-full"
-										disabled={state.isSubmitting}
+										disabled={state.isSubmitting || isPending}
 									>
 										{state.isSubmitting ? "Signing in..." : "Sign In"}
 									</Button>

@@ -1,5 +1,5 @@
 import type { AppRouterClient } from "@kc-rugengine/api/routers/index";
-import { createORPCClient } from "@orpc/client";
+import { createORPCClient, ORPCError } from "@orpc/client";
 import { createTanstackQueryUtils } from "@orpc/tanstack-query";
 import type { QueryClient } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
@@ -7,10 +7,14 @@ import {
 	createRootRouteWithContext,
 	HeadContent,
 	Outlet,
+	useLocation,
+	useNavigate,
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useState } from "react";
+import { ErrorBoundary } from "@/components/error-boundary";
 import Header from "@/components/header";
+import { PWAHandler } from "@/components/pwa";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { link, type orpc } from "@/utils/orpc";
@@ -23,26 +27,62 @@ export interface RouterAppContext {
 
 export const Route = createRootRouteWithContext<RouterAppContext>()({
 	component: RootComponent,
+	errorComponent: ({ error }) => {
+		const navigate = useNavigate();
+
+		// Handle 401 Unauthorized errors by redirecting to login
+		if (error instanceof ORPCError) {
+			if (error.message === "Unauthorized" || error.code === "UNAUTHORIZED") {
+				// Use useEffect-like pattern with setTimeout to handle navigation
+				setTimeout(() => {
+					navigate({ to: "/login" });
+				}, 0);
+				return null;
+			}
+		}
+
+		// Determine status code and title
+		let statusCode = 500;
+		let title = "Internal Server Error";
+
+		if (error instanceof ORPCError) {
+			if (error.code === "FORBIDDEN") {
+				statusCode = 403;
+				title = "Forbidden";
+			} else if (error.code === "NOT_FOUND") {
+				statusCode = 404;
+				title = "Not Found";
+			} else if (error.code === "BAD_REQUEST") {
+				statusCode = 400;
+				title = "Bad Request";
+			}
+		}
+
+		return (
+			<ErrorBoundary error={error} statusCode={statusCode} title={title} />
+		);
+	},
 	head: () => ({
 		meta: [
 			{
-				title: "kc-rugengine",
+				title: "RugPull Engine",
 			},
 			{
 				name: "description",
-				content: "kc-rugengine is a web application",
+				content: "RugPull Engine is a web application",
 			},
 		],
 		links: [
 			{
 				rel: "icon",
-				href: "/favicon.ico",
+				href: "/logo.jpeg",
 			},
 		],
 	}),
 });
 
 function RootComponent() {
+	const location = useLocation();
 	const [client] = useState<AppRouterClient>(() => createORPCClient(link));
 	const [_orpcUtils] = useState(() => createTanstackQueryUtils(client));
 
@@ -56,10 +96,13 @@ function RootComponent() {
 				storageKey="vite-ui-theme"
 			>
 				<div className="grid h-svh grid-rows-[auto_1fr]">
-					<Header />
+					<Header
+						secure={location.pathname !== "/login" && location.pathname !== "/"}
+					/>
 					<Outlet />
 				</div>
 				<Toaster richColors />
+				<PWAHandler />
 			</ThemeProvider>
 			<TanStackRouterDevtools position="bottom-left" />
 			<ReactQueryDevtools position="bottom" buttonPosition="bottom-right" />

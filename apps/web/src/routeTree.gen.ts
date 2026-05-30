@@ -9,25 +9,24 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as LoginIndexRouteImport } from './routes/login/index'
-import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
+import { Route as ProtectedRouteImport } from './routes/_protected'
+import { Route as OthersRouteImport } from './routes/_others'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as OthersIndexRouteImport } from './routes/_others/index'
+import { Route as AdminSignupRouteImport } from './routes/admin/signup'
 import { Route as AdminLoginRouteImport } from './routes/admin/login'
+import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
+import { Route as OthersPricingRouteImport } from './routes/_others/pricing'
+import { Route as OthersMixerRouteImport } from './routes/_others/mixer'
+import { Route as OthersLoginRouteImport } from './routes/_others/login'
+import { Route as OthersHiddenSignupRouteImport } from './routes/_others/hidden/signup'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LoginIndexRoute = LoginIndexRouteImport.update({
-  id: '/login/',
-  path: '/login/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
+const OthersRoute = OthersRouteImport.update({
+  id: '/_others',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -35,71 +34,143 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OthersIndexRoute = OthersIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => OthersRoute,
+} as any)
+const AdminSignupRoute = AdminSignupRouteImport.update({
+  id: '/admin/signup',
+  path: '/admin/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/admin/login',
   path: '/admin/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProtectedDashboardRoute = ProtectedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const OthersPricingRoute = OthersPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => OthersRoute,
+} as any)
+const OthersMixerRoute = OthersMixerRouteImport.update({
+  id: '/mixer',
+  path: '/mixer',
+  getParentRoute: () => OthersRoute,
+} as any)
+const OthersLoginRoute = OthersLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => OthersRoute,
+} as any)
+const OthersHiddenSignupRoute = OthersHiddenSignupRouteImport.update({
+  id: '/hidden/signup',
+  path: '/hidden/signup',
+  getParentRoute: () => OthersRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/login': typeof OthersLoginRoute
+  '/mixer': typeof OthersMixerRoute
+  '/pricing': typeof OthersPricingRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/signup': typeof AdminSignupRoute
+  '/': typeof OthersIndexRoute
   '/admin': typeof AdminIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/login': typeof LoginIndexRoute
+  '/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/login': typeof OthersLoginRoute
+  '/mixer': typeof OthersMixerRoute
+  '/pricing': typeof OthersPricingRoute
+  '/dashboard': typeof ProtectedDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/signup': typeof AdminSignupRoute
+  '/': typeof OthersIndexRoute
   '/admin': typeof AdminIndexRoute
-  '/dashboard': typeof DashboardIndexRoute
-  '/login': typeof LoginIndexRoute
+  '/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_others': typeof OthersRouteWithChildren
+  '/_protected': typeof ProtectedRouteWithChildren
+  '/_others/login': typeof OthersLoginRoute
+  '/_others/mixer': typeof OthersMixerRoute
+  '/_others/pricing': typeof OthersPricingRoute
+  '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/admin/login': typeof AdminLoginRoute
+  '/admin/signup': typeof AdminSignupRoute
+  '/_others/': typeof OthersIndexRoute
   '/admin/': typeof AdminIndexRoute
-  '/dashboard/': typeof DashboardIndexRoute
-  '/login/': typeof LoginIndexRoute
+  '/_others/hidden/signup': typeof OthersHiddenSignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/admin/login' | '/admin' | '/dashboard' | '/login'
+  fullPaths:
+    | '/login'
+    | '/mixer'
+    | '/pricing'
+    | '/dashboard'
+    | '/admin/login'
+    | '/admin/signup'
+    | '/'
+    | '/admin'
+    | '/hidden/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/admin/login' | '/admin' | '/dashboard' | '/login'
-  id: '__root__' | '/' | '/admin/login' | '/admin/' | '/dashboard/' | '/login/'
+  to:
+    | '/login'
+    | '/mixer'
+    | '/pricing'
+    | '/dashboard'
+    | '/admin/login'
+    | '/admin/signup'
+    | '/'
+    | '/admin'
+    | '/hidden/signup'
+  id:
+    | '__root__'
+    | '/_others'
+    | '/_protected'
+    | '/_others/login'
+    | '/_others/mixer'
+    | '/_others/pricing'
+    | '/_protected/dashboard'
+    | '/admin/login'
+    | '/admin/signup'
+    | '/_others/'
+    | '/admin/'
+    | '/_others/hidden/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  OthersRoute: typeof OthersRouteWithChildren
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
+  AdminSignupRoute: typeof AdminSignupRoute
   AdminIndexRoute: typeof AdminIndexRoute
-  DashboardIndexRoute: typeof DashboardIndexRoute
-  LoginIndexRoute: typeof LoginIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/_protected': {
+      id: '/_protected'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardIndexRouteImport
+    '/_others': {
+      id: '/_others'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof OthersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -109,6 +180,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_others/': {
+      id: '/_others/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof OthersIndexRouteImport
+      parentRoute: typeof OthersRoute
+    }
+    '/admin/signup': {
+      id: '/admin/signup'
+      path: '/admin/signup'
+      fullPath: '/admin/signup'
+      preLoaderRoute: typeof AdminSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/admin/login'
@@ -116,15 +201,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_protected/dashboard': {
+      id: '/_protected/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof ProtectedDashboardRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_others/pricing': {
+      id: '/_others/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof OthersPricingRouteImport
+      parentRoute: typeof OthersRoute
+    }
+    '/_others/mixer': {
+      id: '/_others/mixer'
+      path: '/mixer'
+      fullPath: '/mixer'
+      preLoaderRoute: typeof OthersMixerRouteImport
+      parentRoute: typeof OthersRoute
+    }
+    '/_others/login': {
+      id: '/_others/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof OthersLoginRouteImport
+      parentRoute: typeof OthersRoute
+    }
+    '/_others/hidden/signup': {
+      id: '/_others/hidden/signup'
+      path: '/hidden/signup'
+      fullPath: '/hidden/signup'
+      preLoaderRoute: typeof OthersHiddenSignupRouteImport
+      parentRoute: typeof OthersRoute
+    }
   }
 }
 
+interface OthersRouteChildren {
+  OthersLoginRoute: typeof OthersLoginRoute
+  OthersMixerRoute: typeof OthersMixerRoute
+  OthersPricingRoute: typeof OthersPricingRoute
+  OthersIndexRoute: typeof OthersIndexRoute
+  OthersHiddenSignupRoute: typeof OthersHiddenSignupRoute
+}
+
+const OthersRouteChildren: OthersRouteChildren = {
+  OthersLoginRoute: OthersLoginRoute,
+  OthersMixerRoute: OthersMixerRoute,
+  OthersPricingRoute: OthersPricingRoute,
+  OthersIndexRoute: OthersIndexRoute,
+  OthersHiddenSignupRoute: OthersHiddenSignupRoute,
+}
+
+const OthersRouteWithChildren =
+  OthersRoute._addFileChildren(OthersRouteChildren)
+
+interface ProtectedRouteChildren {
+  ProtectedDashboardRoute: typeof ProtectedDashboardRoute
+}
+
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedDashboardRoute: ProtectedDashboardRoute,
+}
+
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  OthersRoute: OthersRouteWithChildren,
+  ProtectedRoute: ProtectedRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
+  AdminSignupRoute: AdminSignupRoute,
   AdminIndexRoute: AdminIndexRoute,
-  DashboardIndexRoute: DashboardIndexRoute,
-  LoginIndexRoute: LoginIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

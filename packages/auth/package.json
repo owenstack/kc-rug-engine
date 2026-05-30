@@ -9,19 +9,17 @@
 		}
 	},
 	"type": "module",
-	"scripts": {
-		"generate": "bunx @better-auth/cli generate --config=./src/index.ts --output=../db/prisma/schema/auth.prisma"
-	},
 	"devDependencies": {
-		"@kc-rugengine/config": "workspace:*"
+		"@kc-rugengine/config": "workspace:*",
+		"@types/bcryptjs": "^3.0.0"
 	},
 	"peerDependencies": {
 		"typescript": "^5"
 	},
 	"dependencies": {
-		"better-auth": "catalog:",
+		"@kc-rugengine/db": "workspace:*",
+		"bcryptjs": "^3.0.3",
 		"dotenv": "catalog:",
-		"zod": "^4.1.11",
-		"@kc-rugengine/db": "workspace:*"
+		"zod": "^4.1.11"
 	}
 }
